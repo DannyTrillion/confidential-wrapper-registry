@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useAccount } from "wagmi";
+import { useAccount, useReadContract } from "wagmi";
 import { parseUnits, formatUnits, type Address } from "viem";
 import type { EnrichedPair } from "@/lib/registry/types";
 import { useUnderlyingTokenState } from "@/lib/hooks/useTokenState";
@@ -54,10 +54,23 @@ export function WrapPanel({ pair, chainId }: { pair: EnrichedPair; chainId: Supp
   const dec = decimals ?? pair.underlying.decimals;
   const wrapperDec = pair.wrapper.decimals ?? 6;
 
-  // The wrapper caps confidential decimals at `wrapperDec`, so it wraps at
-  // rate = 10^(underlyingDecimals - wrapperDecimals). Amounts below `rate` mint
-  // zero, and any remainder below `rate` is dust the wrapper won't pull.
-  const rate = dec != null ? 10n ** BigInt(Math.max(0, dec - wrapperDec)) : 1n;
+  // Read the wrapper's conversion rate straight from the contract — the source
+  // of truth. Fall back to 10^(underlyingDecimals - wrapperDecimals) only while
+  // that read is pending or if a wrapper doesn't expose rate(). Amounts below
+  // `rate` mint zero; any remainder below `rate` is dust the wrapper won't pull.
+  const { data: onchainRate } = useReadContract({
+    address: wrapper,
+    abi: ERC7984_WRAPPER_ABI,
+    functionName: "rate",
+    chainId,
+    query: { staleTime: 60_000 },
+  });
+  const rate =
+    typeof onchainRate === "bigint" && onchainRate > 0n
+      ? onchainRate
+      : dec != null
+        ? 10n ** BigInt(Math.max(0, dec - wrapperDec))
+        : 1n;
 
   const parsed = safeParse(amount, dec);
   const insufficient = parsed != null && balance != null && parsed > balance;
