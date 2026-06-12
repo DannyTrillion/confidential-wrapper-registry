@@ -69,6 +69,22 @@ export function Sidebar() {
           </span>
           Guide
         </Link>
+
+        <Link
+          href="/extend"
+          data-active={pathname === "/extend" ? "true" : undefined}
+          className={cn(
+            "relative flex items-center gap-3 h-10 px-3 rounded-input text-sm font-medium transition-colors duration-200",
+            pathname === "/extend" ? "text-ink bg-white/[0.04]" : "text-ink-faint hover:text-ink hover:bg-white/[0.025]",
+          )}
+        >
+          <span className={cn("transition-colors", pathname === "/extend" ? "text-accent" : "")}>
+            <svg viewBox="0 0 18 18" className="h-[18px] w-[18px]" fill="none" aria-hidden="true">
+              <path d="M9 3.5v11M3.5 9h11" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+            </svg>
+          </span>
+          Add a pair
+        </Link>
       </nav>
 
       <div className="px-3 py-3 border-t border-line space-y-1">
