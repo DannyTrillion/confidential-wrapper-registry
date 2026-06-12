@@ -92,7 +92,10 @@ The registry is sourced as a **hybrid**, exactly as the brief requires:
 
 **Option A — register it onchain** (makes it canonical for everyone): call
 `registerConfidentialToken(erc20, wrapper)` on the Wrappers Registry. It appears
-in the app on next load, no code change.
+in the app on next load, no code change. Note the official registry is
+**owner-curated** (registration is `onlyOwner` — that's what keeps it a trusted
+list), so this path goes through Zama; to register permissionlessly, deploy your
+own `WrappersRegistry` and point the app at it.
 
 **Option B — declare it locally** (custom or not-yet-registered): add one entry
 to `lib/registry/customPairs.ts` and reload:

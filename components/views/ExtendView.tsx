@@ -97,8 +97,8 @@ export function ExtendView() {
         id="extend"
         intro="The app reads the official registry live from the blockchain, and merges in any local pairs on top — a hybrid registry. There's no hardcoded token list, so new pairs need no code surgery."
         points={[
-          { label: "On-chain = canonical", body: "Register a pair on the Wrappers Registry and it shows up here automatically on the next load — zero code changes, for everyone." },
-          { label: "Local = custom / dev", body: "Add one line to a config file for pairs that aren't (yet) registered. They appear tagged “Local”, fully wrappable and revealable." },
+          { label: "Local = self-serve", body: "Add one line to a config file for any pair — custom or not-yet-registered. It appears tagged “Local”, fully wrappable and revealable. No permission needed; works in your own instance instantly." },
+          { label: "On-chain = canonical", body: "A pair registered on the Wrappers Registry shows up here automatically — zero code, for everyone. The official registry is curated (owner-only), so this path goes through Zama, or your own registry." },
           { label: "On-chain truth wins", body: "If a local pair is later registered on-chain, the on-chain entry takes over automatically. You only ever supply two addresses — metadata is resolved live." },
         ]}
       />
@@ -177,7 +177,7 @@ export function ExtendView() {
           <MethodCard
             n={1}
             title="Register on-chain"
-            body="Call registerConfidentialToken(erc20, wrapper) on the Wrappers Registry. It becomes canonical and shows up for everyone — no code change."
+            body="Call registerConfidentialToken(erc20, wrapper) → canonical for everyone, no code change. The official registry is owner-curated, so this goes through Zama (or a registry you deploy yourself)."
           />
           <MethodCard
             n={2}
@@ -199,6 +199,21 @@ export function ExtendView() {
           </MethodCard>
         </div>
       </section>
+
+      {/* Honest note on which path is actually self-serve. */}
+      <div className="rounded-card border border-accent/20 bg-accent-faint p-4 flex items-start gap-3">
+        <svg viewBox="0 0 18 18" className="h-4 w-4 mt-0.5 shrink-0 text-accent" fill="none" aria-hidden="true">
+          <circle cx="9" cy="9" r="6.8" stroke="currentColor" strokeWidth="1.3" />
+          <path d="M9 8.2v4M9 5.8h.01" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+        </svg>
+        <p className="text-13 text-ink-muted leading-relaxed">
+          <strong className="text-ink">Which path is for me?</strong> Surfacing a pair in your own instance is fully
+          self-serve — use the local config above, no permission needed, live in minutes. Getting onto the{" "}
+          <em>official, shared</em> registry is curated: that contract is owner-only (which is what makes it a trusted
+          list), so on-chain registration goes through Zama — or you register permissionlessly on a{" "}
+          <span className="font-mono text-ink-faint">WrappersRegistry</span> you deploy yourself and point a fork at.
+        </p>
+      </div>
     </div>
   );
 }
