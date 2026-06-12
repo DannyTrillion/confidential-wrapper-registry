@@ -87,8 +87,9 @@ export function ExtendView() {
   }
 
   return (
-    <div className="space-y-5 max-w-3xl">
+    <div className="space-y-5 max-w-3xl mx-auto">
       <PageHeader
+        center
         title="Add a token pair"
         subtitle="The registry is extensible by design. Surface any ERC-20 ↔ ERC-7984 pair — register it on-chain so everyone sees it, or declare it locally for custom and dev-only tokens."
       />
@@ -105,7 +106,7 @@ export function ExtendView() {
 
       {/* Interactive builder */}
       <Card className="p-5 sm:p-6 space-y-4">
-        <div>
+        <div className="text-center">
           <h2 className="text-sm font-semibold text-ink">Build your config entry</h2>
           <p className="text-13 text-ink-faint mt-0.5">
             Paste the two addresses, verify them on-chain, and copy the exact line to add.
@@ -113,7 +114,7 @@ export function ExtendView() {
         </div>
 
         {/* network toggle */}
-        <div className="inline-flex items-center gap-1 rounded-pill border border-line bg-base/50 p-0.5">
+        <div className="flex w-fit mx-auto items-center gap-1 rounded-pill border border-line bg-base/50 p-0.5">
           {[sepolia.id, mainnet.id].map((id) => (
             <button
               key={id}
@@ -135,7 +136,7 @@ export function ExtendView() {
         <AddressField label="Public token — ERC-20 address" value={tokenInput} onChange={setTokenInput} valid={tokenValid} />
         <AddressField label="Confidential token — ERC-7984 wrapper address" value={confInput} onChange={setConfInput} valid={confValid} />
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center justify-center gap-2">
           <Button variant="secondary" size="sm" onClick={verify} disabled={!bothValid} loading={status === "checking"}>
             Verify on-chain
           </Button>
@@ -172,7 +173,7 @@ export function ExtendView() {
 
       {/* Three methods */}
       <section>
-        <h2 className="text-sm font-semibold text-ink mb-3">The three ways to add a pair</h2>
+        <h2 className="text-sm font-semibold text-ink mb-3 text-center">The three ways to add a pair</h2>
         <div className="grid sm:grid-cols-3 gap-3">
           <MethodCard
             n={1}
@@ -232,7 +233,7 @@ function AddressField({
   const show = value.trim().length > 0;
   return (
     <div>
-      <label className="text-2xs uppercase tracking-wide text-ink-faint">{label}</label>
+      <label className="block text-center text-2xs uppercase tracking-wide text-ink-faint">{label}</label>
       <input
         value={value}
         onChange={(e) => onChange(e.target.value)}

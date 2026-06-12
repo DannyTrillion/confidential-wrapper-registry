@@ -38,11 +38,21 @@ export function BalancesView() {
   );
 }
 
-export function PageHeader({ title, subtitle }: { title: string; subtitle: string }) {
+export function PageHeader({
+  title,
+  subtitle,
+  center,
+}: {
+  title: string;
+  subtitle: string;
+  center?: boolean;
+}) {
   return (
-    <div>
+    <div className={center ? "text-center" : undefined}>
       <h1 className="text-xl sm:text-2xl font-semibold text-ink tracking-tight">{title}</h1>
-      <p className="mt-1 text-13 text-ink-faint max-w-2xl leading-relaxed">{subtitle}</p>
+      <p className={`mt-1 text-13 text-ink-faint max-w-2xl leading-relaxed${center ? " mx-auto" : ""}`}>
+        {subtitle}
+      </p>
     </div>
   );
 }

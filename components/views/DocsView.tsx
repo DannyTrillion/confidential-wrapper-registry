@@ -13,23 +13,23 @@ import { cn } from "@/lib/cn";
  */
 export function DocsView() {
   return (
-    <div className="space-y-8 max-w-3xl">
+    <div className="space-y-8 max-w-3xl mx-auto">
       {/* Hero */}
       <Card className="relative overflow-hidden p-6 sm:p-8">
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-accent-faint to-transparent" />
-        <div className="relative flex flex-col sm:flex-row items-start gap-5">
+        <div className="relative flex flex-col items-center text-center gap-4">
           <Mascot mood="wave" size={84} />
           <div>
             <div className="text-2xs uppercase tracking-[0.14em] text-accent">The Guide</div>
             <h1 className="mt-1.5 text-2xl sm:text-3xl font-semibold text-ink tracking-tight">
               What is a Confidential Wrapper Registry?
             </h1>
-            <p className="mt-2.5 text-sm text-ink-muted leading-relaxed max-w-xl">
+            <p className="mt-2.5 text-sm text-ink-muted leading-relaxed max-w-xl mx-auto">
               It&apos;s a place to turn ordinary tokens into <strong className="text-ink">confidential</strong> ones — so
               your balances and payments stay your business, while everything still runs on a public blockchain.
               This page explains the whole idea in plain English.
             </p>
-            <div className="mt-4 flex flex-wrap items-center gap-2.5">
+            <div className="mt-4 flex flex-wrap items-center justify-center gap-2.5">
               <Link
                 href="/"
                 className="h-9 px-4 inline-flex items-center rounded-pill text-13 font-semibold bg-accent text-base hover:brightness-105 active:scale-[0.97] transition"
@@ -165,7 +165,7 @@ const GLOSSARY: { term: string; plain: string }[] = [
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section>
-      <h2 className="text-sm font-semibold text-ink tracking-tight mb-3">{title}</h2>
+      <h2 className="text-sm font-semibold text-ink tracking-tight mb-3 text-center">{title}</h2>
       {children}
     </section>
   );
