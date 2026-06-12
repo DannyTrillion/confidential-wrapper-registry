@@ -22,12 +22,11 @@ export interface CustomPair {
 
 export const CUSTOM_PAIRS: Record<SupportedChainId, CustomPair[]> = {
   [sepolia.id]: [
-    // Demo of the hybrid registry — a pair that is NOT in the onchain registry.
-    // Generate a real one in seconds:
-    //   cd contracts && SEPOLIA_RPC_URL=... DEPLOYER_PRIVATE_KEY=0x... npm run deploy:custom
-    // then paste the two printed addresses below and reload. It appears tagged
-    // "Local" and is fully wrappable / unwrappable / revealable.
-    // { token: "0xYourErc20…", confidentialToken: "0xYourErc7984Wrapper…" },
+    // Demo of the hybrid registry — a real pair that is NOT in the onchain
+    // registry, surfaced locally and tagged "Local" in the UI. Fully wrappable /
+    // unwrappable / revealable. Deployed with `npm run deploy:custom` (see
+    // contracts/scripts/deploy-custom-pair.ts) — add your own the same way.
+    { token: "0x2035eab6DCfDb55DA1b737c07d340205e3BE3707", confidentialToken: "0xBe27b34855a9c7FFcDd068B34b2Fe303F82BdF26" },
   ],
   [mainnet.id]: [],
 };
