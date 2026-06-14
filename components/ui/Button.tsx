@@ -25,10 +25,10 @@ const variants: Record<Variant, string> = {
     "btn-sheen bg-accent text-base hover:bg-[#FFDB3D] active:bg-[#E6BD00] " +
     "focus-visible:ring-accent",
   secondary:
-    "bg-white/[0.03] text-ink border border-line hover:border-line-strong hover:bg-white/[0.07] " +
+    "bg-elevate/[0.03] text-ink border border-line hover:border-line-strong hover:bg-elevate/[0.07] " +
     "focus-visible:ring-accent",
   ghost:
-    "bg-transparent text-ink-muted hover:text-ink hover:bg-white/[0.05] " +
+    "bg-transparent text-ink-muted hover:text-ink hover:bg-elevate/[0.05] " +
     "focus-visible:ring-accent",
   danger:
     "bg-transparent text-danger border border-danger/30 hover:bg-danger/10 " +

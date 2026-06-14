@@ -44,7 +44,7 @@ export function Sidebar() {
               data-tour={`nav-${item.href}`}
               className={cn(
                 "relative flex items-center gap-3 h-10 px-3 rounded-input text-sm font-medium transition-colors duration-200",
-                active ? "text-ink bg-white/[0.04]" : "text-ink-faint hover:text-ink hover:bg-white/[0.025]",
+                active ? "text-ink bg-elevate/[0.04]" : "text-ink-faint hover:text-ink hover:bg-elevate/[0.025]",
               )}
             >
               <span className={cn("transition-colors duration-200", active ? "text-accent" : "")}>{item.icon}</span>
@@ -58,7 +58,7 @@ export function Sidebar() {
           data-active={pathname === "/docs" ? "true" : undefined}
           className={cn(
             "relative flex items-center gap-3 h-10 px-3 rounded-input text-sm font-medium transition-colors duration-200",
-            pathname === "/docs" ? "text-ink bg-white/[0.04]" : "text-ink-faint hover:text-ink hover:bg-white/[0.025]",
+            pathname === "/docs" ? "text-ink bg-elevate/[0.04]" : "text-ink-faint hover:text-ink hover:bg-elevate/[0.025]",
           )}
         >
           <span className={cn("transition-colors", pathname === "/docs" ? "text-accent" : "")}>
@@ -75,7 +75,7 @@ export function Sidebar() {
           data-active={pathname === "/extend" ? "true" : undefined}
           className={cn(
             "relative flex items-center gap-3 h-10 px-3 rounded-input text-sm font-medium transition-colors duration-200",
-            pathname === "/extend" ? "text-ink bg-white/[0.04]" : "text-ink-faint hover:text-ink hover:bg-white/[0.025]",
+            pathname === "/extend" ? "text-ink bg-elevate/[0.04]" : "text-ink-faint hover:text-ink hover:bg-elevate/[0.025]",
           )}
         >
           <span className={cn("transition-colors", pathname === "/extend" ? "text-accent" : "")}>
@@ -90,7 +90,7 @@ export function Sidebar() {
       <div className="px-3 py-3 border-t border-line space-y-1">
         <button
           onClick={() => window.dispatchEvent(new Event(TOUR_START_EVENT))}
-          className="w-full flex items-center gap-3 h-9 px-3 rounded-input text-13 font-medium text-ink-faint hover:text-accent hover:bg-white/[0.025] transition-colors"
+          className="w-full flex items-center gap-3 h-9 px-3 rounded-input text-13 font-medium text-ink-faint hover:text-accent hover:bg-elevate/[0.025] transition-colors"
         >
           <svg viewBox="0 0 16 16" className="h-4 w-4" fill="none" aria-hidden="true">
             <circle cx="8" cy="8" r="6.4" stroke="currentColor" strokeWidth="1.3" />
@@ -102,7 +102,7 @@ export function Sidebar() {
           href="https://docs.zama.org/protocol/protocol-apps/confidential-tokens/wrapper-registry"
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-3 h-9 px-3 rounded-input text-13 text-ink-faint hover:text-accent hover:bg-white/[0.025] transition-colors"
+          className="flex items-center gap-3 h-9 px-3 rounded-input text-13 text-ink-faint hover:text-accent hover:bg-elevate/[0.025] transition-colors"
         >
           <svg viewBox="0 0 16 16" className="h-4 w-4" fill="none" aria-hidden="true">
             <path d="M9 3h4v4M13 3 7 9M7 4H4a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1V9" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />

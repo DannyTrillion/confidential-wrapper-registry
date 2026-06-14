@@ -4,6 +4,7 @@ import { NetworkSwitcher } from "./NetworkSwitcher";
 import { BrandGlyph } from "./BrandGlyph";
 import { ConnectButton } from "@/components/ui/ConnectButton";
 import { SessionChip } from "@/components/SessionChip";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { CMDK_OPEN_EVENT } from "@/components/CommandPalette";
 
 /** Sticky top bar (alongside the sidebar): command search + network + wallet. */
@@ -19,7 +20,7 @@ export function TopBar() {
         <button
           data-tour="search"
           onClick={() => window.dispatchEvent(new Event(CMDK_OPEN_EVENT))}
-          className="hidden md:flex items-center gap-2 h-9 w-72 px-3 rounded-pill border border-line bg-white/[0.03] text-13 text-ink-faint hover:border-line-strong hover:text-ink-muted transition-colors"
+          className="hidden md:flex items-center gap-2 h-9 w-72 px-3 rounded-pill border border-line bg-elevate/[0.03] text-13 text-ink-faint hover:border-line-strong hover:text-ink-muted transition-colors"
         >
           <svg viewBox="0 0 16 16" className="h-3.5 w-3.5" fill="none" aria-hidden="true">
             <circle cx="7" cy="7" r="4.5" stroke="currentColor" strokeWidth="1.4" />
@@ -31,6 +32,7 @@ export function TopBar() {
 
         <div data-tour="connect" className="flex items-center gap-2 sm:gap-3 ml-auto">
           <SessionChip />
+          <ThemeToggle />
           <NetworkSwitcher />
           <ConnectButton />
         </div>

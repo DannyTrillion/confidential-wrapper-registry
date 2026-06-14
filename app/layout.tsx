@@ -3,6 +3,7 @@ import { Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
 import { AppLayout } from "@/components/layout/AppLayout";
+import { THEME_SCRIPT } from "@/components/ThemeToggle";
 
 // Space Grotesk — geometric display sans, the BlindPay-style voice.
 const grotesk = Space_Grotesk({
@@ -48,7 +49,11 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${grotesk.variable} ${jetbrainsMono.variable}`}>
+    <html lang="en" className={`${grotesk.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
+      <head>
+        {/* Apply saved/system theme before paint to avoid a flash. */}
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+      </head>
       <body>
         <Providers>
           <AppLayout>{children}</AppLayout>

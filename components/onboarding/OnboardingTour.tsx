@@ -214,7 +214,7 @@ export function OnboardingTour() {
     <div className="fixed inset-0 z-[90]" role="dialog" aria-modal="true" aria-label="Welcome tour">
       {/* Backdrop. When there's a target, the spotlight div paints the dim via its
           huge box-shadow; otherwise we dim the whole screen here. */}
-      {!rect && <div className={cn("absolute inset-0 bg-base/80 backdrop-blur-[2px]", !reduced && "animate-fade-in")} />}
+      {!rect && <div className={cn("absolute inset-0 bg-black/70 backdrop-blur-[2px]", !reduced && "animate-fade-in")} />}
 
       {/* Spotlight cutout */}
       {rect && (

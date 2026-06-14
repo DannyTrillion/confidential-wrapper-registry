@@ -236,8 +236,8 @@ function LifecycleRail() {
                 i === 2
                   ? "border-accent/30 bg-accent-faint text-accent"
                   : i === 4
-                    ? "border-line-strong bg-white/[0.06] text-ink"
-                    : "border-line bg-white/[0.025] text-ink-muted",
+                    ? "border-line-strong bg-elevate/[0.06] text-ink"
+                    : "border-line bg-elevate/[0.025] text-ink-muted",
               )}
             >
               {label}

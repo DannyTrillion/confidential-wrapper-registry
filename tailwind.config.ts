@@ -20,32 +20,35 @@ const config: Config = {
         xs: "400px",
       },
       colors: {
-        // Background layers — BlindPay-style pure black with translucent surfaces.
-        base: "#000000",
-        surface: "#0B0B0D",
-        raised: "#161619",
-        // The one accent.
+        // All tokens resolve to CSS variables so the theme can switch (dark
+        // default; `.light` on <html> overrides them — see globals.css).
+        // Background layers.
+        base: "rgb(var(--base) / <alpha-value>)",
+        surface: "rgb(var(--surface) / <alpha-value>)",
+        raised: "rgb(var(--raised) / <alpha-value>)",
+        // Elevation overlay (white on dark, black on light) for hover/active washes.
+        elevate: "rgb(var(--overlay) / <alpha-value>)",
+        // The one accent (bright yellow on dark, deeper amber on light for contrast).
         accent: {
-          DEFAULT: "#FFD208",
-          // Yellow tints for hover/active wash and faint fills.
-          soft: "rgba(255, 210, 8, 0.12)",
-          faint: "rgba(255, 210, 8, 0.06)",
+          DEFAULT: "rgb(var(--accent) / <alpha-value>)",
+          soft: "rgb(var(--accent) / 0.12)",
+          faint: "rgb(var(--accent) / 0.06)",
         },
-        // Status — muted, desaturated. Used ONLY for their semantic meaning.
-        ok: "#4ADE80", // confirmed / valid
-        danger: "#F87171", // revoked / failed
-        warn: "#FBBF24", // pending
-        // Grayscale text ramp on dark.
+        // Status — muted, semantic only.
+        ok: "rgb(var(--ok) / <alpha-value>)",
+        danger: "rgb(var(--danger) / <alpha-value>)",
+        warn: "rgb(var(--warn) / <alpha-value>)",
+        // Grayscale text ramp.
         ink: {
-          DEFAULT: "#EDEDEF", // primary text — never pure white
-          muted: "#A1A1AA", // secondary
-          faint: "#71717A", // tertiary / placeholders
-          ghost: "#52525B", // disabled
+          DEFAULT: "rgb(var(--ink) / <alpha-value>)",
+          muted: "rgb(var(--ink-muted) / <alpha-value>)",
+          faint: "rgb(var(--ink-faint) / <alpha-value>)",
+          ghost: "rgb(var(--ink-ghost) / <alpha-value>)",
         },
-        // 1px hairline borders at 8–10% white.
+        // 1px hairline borders.
         line: {
-          DEFAULT: "rgba(255,255,255,0.08)",
-          strong: "rgba(255,255,255,0.12)",
+          DEFAULT: "rgb(var(--line) / 0.08)",
+          strong: "rgb(var(--line) / 0.12)",
         },
       },
       fontFamily: {

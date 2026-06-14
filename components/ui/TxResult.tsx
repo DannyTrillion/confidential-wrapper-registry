@@ -137,7 +137,7 @@ function TxResultOverlay({
         aria-label="Dismiss"
         onClick={onDismiss}
         className={cn(
-          "absolute inset-0 bg-base/65 backdrop-blur-[3px]",
+          "absolute inset-0 bg-black/55 backdrop-blur-[3px]",
           !reduced && "animate-fade-in",
         )}
       />

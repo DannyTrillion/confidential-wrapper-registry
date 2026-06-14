@@ -186,7 +186,7 @@ export function CommandPalette({
 
   return (
     <div className="fixed inset-0 z-[60]" role="dialog" aria-modal="true" aria-label="Command palette">
-      <div className="absolute inset-0 bg-base/70 backdrop-blur-sm animate-fade-in" onClick={() => setOpen(false)} />
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm animate-fade-in" onClick={() => setOpen(false)} />
       <div className="absolute left-1/2 top-[12vh] w-[min(92vw,560px)] -translate-x-1/2 animate-rise-in">
         <div
           ref={panelRef}

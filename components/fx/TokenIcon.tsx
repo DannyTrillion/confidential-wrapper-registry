@@ -31,7 +31,7 @@ export function TokenIcon({
         "relative grid place-items-center shrink-0 rounded-full border overflow-hidden transition duration-200 group-hover/token:scale-110",
         confidential
           ? "border-accent/30 bg-accent-faint group-hover/token:ring-2 group-hover/token:ring-accent/25"
-          : "border-line bg-raised group-hover/token:ring-2 group-hover/token:ring-white/15",
+          : "border-line bg-raised group-hover/token:ring-2 group-hover/token:ring-elevate/15",
         className,
       )}
       style={{ width: size, height: size }}

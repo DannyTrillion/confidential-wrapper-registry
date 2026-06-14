@@ -45,9 +45,9 @@ export function DecryptPanel({ pair, chainId }: { pair: EnrichedPair; chainId: S
   if (!net.supportsDecryption) {
     return (
       <PanelNote>
-        Revealing a confidential balance is wired for the{" "}
-        <span className="text-ink">Sepolia</span> test network in this app. Switch the network up top
-        to Sepolia to reveal balances.
+        Revealing a confidential balance isn&apos;t available on{" "}
+        <span className="text-ink">{net.name}</span> in this app. Switch to a supported network up top
+        to reveal balances.
       </PanelNote>
     );
   }

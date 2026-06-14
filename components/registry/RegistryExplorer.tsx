@@ -122,7 +122,7 @@ function StatStrip({
       {/* Composition meter — at-a-glance registry health, muted on-theme tones. */}
       {!loading && counts.total > 0 && (
         <div className="flex items-center gap-3 px-1">
-          <div className="flex h-1 flex-1 overflow-hidden rounded-pill bg-white/[0.05]">
+          <div className="flex h-1 flex-1 overflow-hidden rounded-pill bg-elevate/[0.05]">
             <div className="bg-accent/45 transition-all duration-500" style={{ width: `${activePct}%` }} />
             <div className="bg-ink-faint/30 transition-all duration-500" style={{ width: `${revokedPct}%` }} />
           </div>

@@ -144,7 +144,7 @@ export function ActivityView() {
 
 function Row({ item, chainId }: { item: GlobalActivityItem; chainId: number }) {
   return (
-    <li className="flex items-center gap-3 px-2.5 py-3 transition-colors hover:bg-white/[0.015] rounded-input">
+    <li className="flex items-center gap-3 px-2.5 py-3 transition-colors hover:bg-elevate/[0.015] rounded-input">
       <Glyph type={item.type} />
       <div className="min-w-0 flex-1">
         <div className="text-13 text-ink">
