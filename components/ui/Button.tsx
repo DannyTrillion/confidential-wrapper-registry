@@ -20,9 +20,11 @@ const base =
   "disabled:opacity-40 disabled:pointer-events-none disabled:active:scale-100";
 
 const variants: Record<Variant, string> = {
-  // Zama-yellow pill for the primary action.
+  // Zama-yellow pill for the primary action — glossy top highlight + a soft
+  // accent glow that lifts it off the surface.
   primary:
-    "btn-sheen bg-accent text-base hover:bg-[#FFDB3D] active:bg-[#E6BD00] " +
+    "btn-sheen bg-accent text-base hover:brightness-[1.06] active:brightness-95 " +
+    "shadow-[inset_0_1px_0_rgba(255,255,255,0.28),0_6px_20px_-8px_rgb(var(--accent)/0.55)] " +
     "focus-visible:ring-accent",
   secondary:
     "bg-elevate/[0.03] text-ink border border-line hover:border-line-strong hover:bg-elevate/[0.07] " +

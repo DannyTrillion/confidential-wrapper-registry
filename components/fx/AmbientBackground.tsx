@@ -1,27 +1,44 @@
 "use client";
 
 /**
- * Ambient layer: soft Zama-yellow aurora glows on pure black, breathing slowly.
- * Fixed, non-interactive, behind everything. Reduced-motion just freezes them
- * (the breathe animation is disabled globally under prefers-reduced-motion).
+ * Ambient layer: layered Zama-yellow/amber aurora glows on the base, breathing
+ * slowly, for depth and warmth — the "premium" backdrop. Fixed, non-interactive,
+ * behind everything. Reduced-motion freezes the breathe; light mode dims the
+ * whole layer so it reads as a faint warm tint rather than a wash.
  */
 export function AmbientBackground() {
   return (
-    <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden" aria-hidden="true">
-      {/* Primary yellow bloom, top-center. */}
+    <div
+      className="pointer-events-none fixed inset-0 -z-10 overflow-hidden [.light_&]:opacity-50"
+      aria-hidden="true"
+    >
+      {/* Soft top vignette — seats the whole page in a faint warm glow. */}
       <div
-        className="absolute left-1/2 -top-44 h-[600px] w-[1000px] -translate-x-1/2 rounded-pill blur-3xl animate-breathe"
+        className="absolute inset-0"
+        style={{ background: "radial-gradient(120% 80% at 50% -8%, rgba(255,210,8,0.05), transparent 55%)" }}
+      />
+      {/* Primary bloom, top-center — large and soft. */}
+      <div
+        className="absolute left-1/2 -top-52 h-[680px] w-[1200px] -translate-x-1/2 rounded-pill blur-3xl animate-breathe"
         style={{
           background:
-            "radial-gradient(50% 50% at 50% 50%, rgba(255,210,8,0.14), rgba(255,210,8,0.04) 55%, transparent 75%)",
+            "radial-gradient(50% 50% at 50% 50%, rgba(255,210,8,0.17), rgba(255,210,8,0.05) 50%, transparent 72%)",
         }}
       />
-      {/* Warm lower-right glow so the page keeps a faint yellow depth throughout. */}
+      {/* Warm amber glow, lower-right — a second tone for richness. */}
       <div
-        className="absolute right-[-12%] bottom-[-12%] h-[560px] w-[680px] rounded-pill blur-3xl animate-breathe"
+        className="absolute right-[-14%] bottom-[-16%] h-[620px] w-[760px] rounded-pill blur-3xl animate-breathe"
         style={{
           animationDelay: "-3s",
-          background: "radial-gradient(50% 50% at 50% 50%, rgba(255,210,8,0.07), transparent 72%)",
+          background: "radial-gradient(50% 50% at 50% 50%, rgba(255,168,8,0.11), transparent 70%)",
+        }}
+      />
+      {/* Counter-glow, upper-left — balances the composition. */}
+      <div
+        className="absolute left-[-12%] top-[-10%] h-[520px] w-[620px] rounded-pill blur-3xl animate-breathe"
+        style={{
+          animationDelay: "-6s",
+          background: "radial-gradient(50% 50% at 50% 50%, rgba(255,210,8,0.07), transparent 70%)",
         }}
       />
       {/* Fine top hairline of light to seat the header. */}

@@ -12,10 +12,12 @@ export function Card({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
   return (
     <div
       className={cn(
-        // BlindPay glass: translucent white on pure black, top-left sheen,
-        // blurred backdrop, 1px hairline + top edge-light.
+        // Glass: translucent surface, top-left sheen, blurred backdrop, 1px
+        // hairline + top edge-light, and a soft drop shadow so it lifts off the
+        // ambient background for depth. Theme-aware via the overlay token.
         "relative rounded-card border border-line backdrop-blur-2xl",
-        "bg-[radial-gradient(120%_80%_at_0%_0%,rgba(255,255,255,0.06),transparent_46%),linear-gradient(to_bottom,rgba(255,255,255,0.035),rgba(255,255,255,0.012))]",
+        "shadow-[0_6px_28px_-14px_rgba(0,0,0,0.6)]",
+        "bg-[radial-gradient(120%_80%_at_0%_0%,rgb(var(--overlay)/0.06),transparent_46%),linear-gradient(to_bottom,rgb(var(--overlay)/0.035),rgb(var(--overlay)/0.012))]",
         "before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:h-px before:rounded-t-card",
         "before:bg-gradient-to-r before:from-transparent before:via-white/[0.14] before:to-transparent",
         className,
