@@ -292,14 +292,14 @@ export function OnboardingTour() {
             {last ? (
               <button
                 onClick={onCta}
-                className="h-8 px-4 rounded-pill text-13 font-semibold bg-accent text-base hover:brightness-105 active:scale-[0.97] transition"
+                className="h-8 px-4 rounded-pill text-13 font-semibold bg-accent text-[#0a0a0a] hover:brightness-105 active:scale-[0.97] transition"
               >
                 {step.cta ?? "Done"}
               </button>
             ) : (
               <button
                 onClick={() => setI((v) => Math.min(STEPS.length - 1, v + 1))}
-                className="h-8 px-4 rounded-pill text-13 font-semibold bg-accent text-base hover:brightness-105 active:scale-[0.97] transition"
+                className="h-8 px-4 rounded-pill text-13 font-semibold bg-accent text-[#0a0a0a] hover:brightness-105 active:scale-[0.97] transition"
               >
                 Next
               </button>

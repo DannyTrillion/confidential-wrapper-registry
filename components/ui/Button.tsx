@@ -23,7 +23,7 @@ const variants: Record<Variant, string> = {
   // Zama-yellow pill for the primary action — glossy top highlight + a soft
   // accent glow that lifts it off the surface.
   primary:
-    "btn-sheen bg-accent text-base hover:brightness-[1.06] active:brightness-95 " +
+    "btn-sheen bg-accent text-[#0a0a0a] hover:brightness-[1.06] active:brightness-95 " +
     "shadow-[inset_0_1px_0_rgba(255,255,255,0.28),0_6px_20px_-8px_rgb(var(--accent)/0.55)] " +
     "focus-visible:ring-accent",
   secondary:

@@ -294,7 +294,7 @@ function Key({ children }: { children: ReactNode }) {
 }
 
 function ItemIcon({ kind, active }: { kind: Item["icon"]; active: boolean }) {
-  const cls = cn("h-3.5 w-3.5 shrink-0", active ? "text-accent" : "text-ink-faint");
+  const cls = cn("h-3.5 w-3.5 shrink-0", active ? "text-accentInk" : "text-ink-faint");
   if (kind === "network")
     return (
       <svg viewBox="0 0 16 16" className={cls} fill="none" aria-hidden="true">

@@ -46,7 +46,7 @@ export function DecryptDemo({ className }: { className?: string }) {
         <span
           className={cn(
             "inline-flex items-center gap-1.5 rounded-pill border px-2 py-0.5 text-[10px] font-medium tracking-wide transition-colors duration-300",
-            revealed ? "border-accent/30 bg-accent-faint text-accent" : "border-line bg-raised text-ink-faint",
+            revealed ? "border-accent/30 bg-accent-faint text-accentInk" : "border-line bg-raised text-ink-faint",
           )}
         >
           {revealed ? "DECRYPTED" : "ENCRYPTED"}

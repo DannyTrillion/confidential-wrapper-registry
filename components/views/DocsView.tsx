@@ -20,7 +20,7 @@ export function DocsView() {
         <div className="relative flex flex-col sm:flex-row items-start gap-5">
           <Mascot mood="wave" size={84} />
           <div>
-            <div className="text-2xs uppercase tracking-[0.14em] text-accent">The Guide</div>
+            <div className="text-2xs uppercase tracking-[0.14em] text-accentInk">The Guide</div>
             <h1 className="mt-1.5 text-2xl sm:text-3xl font-semibold text-ink tracking-tight">
               What is a Confidential Wrapper Registry?
             </h1>
@@ -32,7 +32,7 @@ export function DocsView() {
             <div className="mt-4 flex flex-wrap items-center gap-2.5">
               <Link
                 href="/"
-                className="h-9 px-4 inline-flex items-center rounded-pill text-13 font-semibold bg-accent text-base hover:brightness-105 active:scale-[0.97] transition"
+                className="h-9 px-4 inline-flex items-center rounded-pill text-13 font-semibold bg-accent text-[#0a0a0a] hover:brightness-105 active:scale-[0.97] transition"
               >
                 Browse the registry
               </Link>
@@ -141,7 +141,7 @@ export function DocsView() {
           <Link href="/faucet" className="h-9 px-4 inline-flex items-center rounded-pill text-13 font-medium text-ink-muted border border-line hover:border-line-strong hover:text-ink transition-colors">
             Get test tokens
           </Link>
-          <Link href="/" className="h-9 px-4 inline-flex items-center rounded-pill text-13 font-semibold bg-accent text-base hover:brightness-105 active:scale-[0.97] transition">
+          <Link href="/" className="h-9 px-4 inline-flex items-center rounded-pill text-13 font-semibold bg-accent text-[#0a0a0a] hover:brightness-105 active:scale-[0.97] transition">
             Open the registry
           </Link>
         </div>
@@ -197,7 +197,7 @@ function MiniCard({
         <span
           className={cn(
             "grid place-items-center h-8 w-8 rounded-input border shrink-0",
-            tone === "accent" ? "border-accent/30 bg-accent/10 text-accent" : "border-line bg-raised text-ink-muted",
+            tone === "accent" ? "border-accent/30 bg-accent/10 text-accentInk" : "border-line bg-raised text-ink-muted",
           )}
         >
           <Icon kind={icon} />
@@ -213,7 +213,7 @@ function StepCard({ n, title, body }: { n: number; title: string; body: string }
   return (
     <div className="rounded-card border border-line glass-soft p-4">
       <div className="flex items-center gap-2.5">
-        <span className="grid place-items-center h-7 w-7 rounded-pill bg-accent/15 text-accent text-13 font-semibold">
+        <span className="grid place-items-center h-7 w-7 rounded-pill bg-accent/15 text-accentInk text-13 font-semibold">
           {n}
         </span>
         <h3 className="text-13 font-medium text-ink">{title}</h3>
@@ -234,7 +234,7 @@ function LifecycleRail() {
               className={cn(
                 "flex-1 text-center rounded-input border px-2 py-2 text-2xs font-medium",
                 i === 2
-                  ? "border-accent/30 bg-accent-faint text-accent"
+                  ? "border-accent/30 bg-accent-faint text-accentInk"
                   : i === 4
                     ? "border-line-strong bg-elevate/[0.06] text-ink"
                     : "border-line bg-elevate/[0.025] text-ink-muted",

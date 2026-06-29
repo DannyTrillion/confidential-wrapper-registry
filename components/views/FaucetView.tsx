@@ -47,7 +47,7 @@ export function FaucetView() {
         <Card className="px-4 py-10 text-center">
           <p className="text-13 text-ink-muted">
             The faucet mints testnet mock tokens — available on{" "}
-            <button onClick={() => setChainId(sepolia.id)} className="text-accent hover:underline">
+            <button onClick={() => setChainId(sepolia.id)} className="text-accentInk hover:underline">
               Sepolia
             </button>{" "}
             only. Mainnet tokens have real value and can&apos;t be minted.

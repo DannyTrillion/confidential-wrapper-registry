@@ -48,7 +48,7 @@ export function TokenIcon({
         />
       ) : (
         <span
-          className={cn("font-mono font-semibold tracking-tight leading-none", confidential ? "text-accent" : "text-ink-muted")}
+          className={cn("font-mono font-semibold tracking-tight leading-none", confidential ? "text-accentInk" : "text-ink-muted")}
           style={{ fontSize: Math.max(7, size * 0.3) }}
         >
           {tokenMonogram(symbol)}

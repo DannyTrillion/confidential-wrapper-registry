@@ -18,7 +18,7 @@ export function Footer() {
           <div className="max-w-sm">
             <div className="flex items-center gap-2">
               <span className="grid place-items-center h-6 w-6 rounded-[6px] bg-accent shrink-0">
-                <BrandGlyph className="h-3.5 w-3.5 text-base" />
+                <BrandGlyph className="h-3.5 w-3.5 text-[#0a0a0a]" />
               </span>
               <span className="text-13 font-semibold text-ink">Confidential Wrapper Registry</span>
             </div>
@@ -40,7 +40,7 @@ export function Footer() {
                   href={`${net.explorerUrl}/address/${net.registry}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-1 inline-block font-mono text-2xs text-ink-muted hover:text-accent transition-colors"
+                  className="mt-1 inline-block font-mono text-2xs text-ink-muted hover:text-accentInk transition-colors"
                   title={net.registry}
                 >
                   {truncateAddress(net.registry, 8, 6)} ↗
@@ -61,7 +61,7 @@ export function Footer() {
 
 function FooterLink({ href, children }: { href: string; children: React.ReactNode }) {
   return (
-    <a href={href} target="_blank" rel="noopener noreferrer" className="text-ink-faint hover:text-accent transition-colors">
+    <a href={href} target="_blank" rel="noopener noreferrer" className="text-ink-faint hover:text-accentInk transition-colors">
       {children}
     </a>
   );

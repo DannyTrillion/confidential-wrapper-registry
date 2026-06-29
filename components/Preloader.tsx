@@ -42,7 +42,7 @@ export function Preloader() {
           {!reduced && (
             <span className="pointer-events-none absolute -inset-2 rounded-3xl bg-accent/25 blur-lg animate-breathe" aria-hidden="true" />
           )}
-          <BrandGlyph className="relative h-8 w-8 text-base" />
+          <BrandGlyph className="relative h-8 w-8 text-[#0a0a0a]" />
         </span>
 
         <h1 className="mt-5 text-sm font-semibold text-ink tracking-tight">Confidential Wrapper Registry</h1>

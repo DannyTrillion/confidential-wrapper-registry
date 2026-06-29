@@ -47,7 +47,7 @@ export function PageGuide({
         className="w-full flex items-center justify-between gap-3 px-4 py-3 text-left"
       >
         <span className="flex items-center gap-2 text-13 font-medium text-ink">
-          <span className="grid place-items-center h-5 w-5 rounded-pill bg-accent/15 text-accent">
+          <span className="grid place-items-center h-5 w-5 rounded-pill bg-accent/15 text-accentInk">
             <svg viewBox="0 0 14 14" className="h-3 w-3" fill="none" aria-hidden="true">
               <circle cx="7" cy="7" r="5.4" stroke="currentColor" strokeWidth="1.2" />
               <path d="M7 6.3v3.2M7 4.5h.01" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
@@ -72,7 +72,7 @@ export function PageGuide({
             {points.map((p, i) => (
               <li key={i} className="rounded-input border border-line glass-soft px-3 py-2.5">
                 <div className="flex items-center gap-2">
-                  <span className="grid place-items-center h-5 w-5 rounded-pill border border-accent/30 bg-accent-faint text-2xs font-mono text-accent">
+                  <span className="grid place-items-center h-5 w-5 rounded-pill border border-accent/30 bg-accent-faint text-2xs font-mono text-accentInk">
                     {i + 1}
                   </span>
                   <span className="text-13 font-medium text-ink">{p.label}</span>

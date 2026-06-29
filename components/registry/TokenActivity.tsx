@@ -42,7 +42,7 @@ export function TokenActivity({
                 href={explorerAddressUrl(chainId, a.receiver)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-mono text-2xs text-ink-muted hover:text-accent transition-colors"
+                className="font-mono text-2xs text-ink-muted hover:text-accentInk transition-colors"
                 title={a.receiver}
               >
                 {truncateAddress(a.receiver)}
@@ -54,7 +54,7 @@ export function TokenActivity({
                 href={explorerTxUrl(chainId, a.txHash)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-2xs text-ink-faint hover:text-accent transition-colors shrink-0"
+                className="text-2xs text-ink-faint hover:text-accentInk transition-colors shrink-0"
               >
                 tx ↗
               </a>

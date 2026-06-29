@@ -3,7 +3,6 @@
 import { NetworkSwitcher } from "./NetworkSwitcher";
 import { BrandGlyph } from "./BrandGlyph";
 import { ConnectButton } from "@/components/ui/ConnectButton";
-import { SessionChip } from "@/components/SessionChip";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { CMDK_OPEN_EVENT } from "@/components/CommandPalette";
 
@@ -14,7 +13,7 @@ export function TopBar() {
       <div className="h-full px-4 sm:px-6 flex items-center justify-between gap-3">
         {/* Mobile logo (sidebar hidden on small screens) */}
         <div className="lg:hidden grid place-items-center h-9 w-9 rounded-input bg-accent shrink-0">
-          <BrandGlyph className="h-[18px] w-[18px] text-base" />
+          <BrandGlyph className="h-[18px] w-[18px] text-[#0a0a0a]" />
         </div>
 
         <button
@@ -31,7 +30,6 @@ export function TopBar() {
         </button>
 
         <div data-tour="connect" className="flex items-center gap-2 sm:gap-3 ml-auto">
-          <SessionChip />
           <ThemeToggle />
           <NetworkSwitcher />
           <ConnectButton />

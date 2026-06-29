@@ -221,7 +221,7 @@ function TxResultOverlay({
             href={explorerTxUrl(result.chainId, result.txHash)}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-2.5 inline-flex items-center gap-1 text-2xs font-mono text-ink-faint hover:text-accent transition-colors"
+            className="mt-2.5 inline-flex items-center gap-1 text-2xs font-mono text-ink-faint hover:text-accentInk transition-colors"
           >
             {result.txHash.slice(0, 10)}…{result.txHash.slice(-8)} ↗
           </a>

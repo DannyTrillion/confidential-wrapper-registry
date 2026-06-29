@@ -152,7 +152,7 @@ function CountdownRing({ pct }: { pct: number }) {
         r={r}
         stroke="currentColor"
         strokeWidth="2"
-        className="text-accent/70 transition-[stroke-dashoffset] duration-1000 ease-linear"
+        className="text-accentInk/70 transition-[stroke-dashoffset] duration-1000 ease-linear"
         fill="none"
         strokeLinecap="round"
         strokeDasharray={c}

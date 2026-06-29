@@ -21,7 +21,7 @@ export function MobileNav() {
               data-tour={`nav-${item.href}`}
               className={cn(
                 "flex-1 min-w-0 flex flex-col items-center justify-center gap-1 py-2 transition-colors",
-                active ? "text-accent" : "text-ink-faint",
+                active ? "text-accentInk" : "text-ink-faint",
               )}
             >
               <span className="[&>svg]:h-4 [&>svg]:w-4">{item.icon}</span>

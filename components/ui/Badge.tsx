@@ -9,7 +9,7 @@ const tones: Record<Tone, string> = {
   revoked: "text-danger bg-danger/10 border-danger/20",
   pending: "text-warn bg-warn/10 border-warn/20",
   neutral: "text-ink-muted bg-raised border-line",
-  accent: "text-accent bg-accent-soft border-accent/25",
+  accent: "text-accentInk bg-accent-soft border-accent/25",
 };
 
 /** Pill badge — full radius, hairline border, 11px uppercase-ish label. */

@@ -78,7 +78,7 @@ function LockIcon({ open }: { open: boolean }) {
     <span
       className={cn(
         "grid place-items-center h-6 w-6 rounded-input border shrink-0 transition-colors duration-300",
-        open ? "border-accent/30 bg-accent-faint text-accent" : "border-line bg-raised text-ink-faint",
+        open ? "border-accent/30 bg-accent-faint text-accentInk" : "border-line bg-raised text-ink-faint",
       )}
     >
       <svg viewBox="0 0 16 16" className="h-3.5 w-3.5" fill="none" aria-hidden="true">

@@ -63,7 +63,7 @@ function ExplorerLink({ href, label }: { href: string; label?: string }) {
       rel="noopener noreferrer"
       aria-label={label ?? "View on block explorer"}
       title="View on explorer"
-      className="inline-grid place-items-center h-5 w-5 rounded-[4px] text-ink-faint hover:text-accent hover:bg-raised transition-colors duration-150"
+      className="inline-grid place-items-center h-5 w-5 rounded-[4px] text-ink-faint hover:text-accentInk hover:bg-raised transition-colors duration-150"
     >
       <svg viewBox="0 0 14 14" className="h-3 w-3" fill="none" aria-hidden="true">
         <path d="M5.5 2.5H3A1.5 1.5 0 0 0 1.5 4v7A1.5 1.5 0 0 0 3 12.5h7A1.5 1.5 0 0 0 11.5 11V8.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />

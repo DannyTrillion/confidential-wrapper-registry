@@ -64,7 +64,7 @@ export function AmountInput({
           type="button"
           onClick={onMax}
           disabled={disabled}
-          className="shrink-0 text-2xs font-medium text-accent hover:text-[#FFDB3D] px-1.5 py-0.5 rounded-[4px] hover:bg-accent-faint transition-colors duration-150"
+          className="shrink-0 text-2xs font-medium text-accentInk hover:text-[#FFDB3D] px-1.5 py-0.5 rounded-[4px] hover:bg-accent-faint transition-colors duration-150"
         >
           MAX
         </button>

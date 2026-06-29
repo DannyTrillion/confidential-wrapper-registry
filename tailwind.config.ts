@@ -34,6 +34,8 @@ const config: Config = {
           soft: "rgb(var(--accent) / 0.12)",
           faint: "rgb(var(--accent) / 0.06)",
         },
+        // Accent for TEXT/links/icons — readable per theme (gold on light).
+        accentInk: "rgb(var(--accent-ink) / <alpha-value>)",
         // Status — muted, semantic only.
         ok: "rgb(var(--ok) / <alpha-value>)",
         danger: "rgb(var(--danger) / <alpha-value>)",

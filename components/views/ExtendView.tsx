@@ -124,7 +124,7 @@ export function ExtendView() {
               }}
               className={cn(
                 "px-3 h-7 rounded-pill text-2xs font-medium transition-colors",
-                chain === id ? "bg-accent text-base" : "text-ink-faint hover:text-ink",
+                chain === id ? "bg-accent text-[#0a0a0a]" : "text-ink-faint hover:text-ink",
               )}
             >
               {getNetwork(id)?.name}
@@ -204,7 +204,7 @@ export function ExtendView() {
 
       {/* Honest note on which path is actually self-serve. */}
       <div className="rounded-card border border-accent/20 bg-accent-faint p-4 flex items-start gap-3">
-        <svg viewBox="0 0 18 18" className="h-4 w-4 mt-0.5 shrink-0 text-accent" fill="none" aria-hidden="true">
+        <svg viewBox="0 0 18 18" className="h-4 w-4 mt-0.5 shrink-0 text-accentInk" fill="none" aria-hidden="true">
           <circle cx="9" cy="9" r="6.8" stroke="currentColor" strokeWidth="1.3" />
           <path d="M9 8.2v4M9 5.8h.01" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
         </svg>
@@ -298,7 +298,7 @@ function MethodCard({
   return (
     <div className="rounded-card border border-line glass-soft p-4">
       <div className="flex items-center gap-2.5">
-        <span className="grid place-items-center h-6 w-6 rounded-pill bg-accent/15 text-accent text-2xs font-semibold">{n}</span>
+        <span className="grid place-items-center h-6 w-6 rounded-pill bg-accent/15 text-accentInk text-2xs font-semibold">{n}</span>
         <h3 className="text-13 font-medium text-ink">{title}</h3>
       </div>
       <p className="mt-2 text-13 text-ink-faint leading-relaxed">{body}</p>
@@ -320,7 +320,7 @@ function CopyButton({ text }: { text: string }) {
           /* clipboard blocked */
         }
       }}
-      className="inline-flex items-center gap-1 text-2xs text-ink-faint hover:text-accent transition-colors"
+      className="inline-flex items-center gap-1 text-2xs text-ink-faint hover:text-accentInk transition-colors"
     >
       {copied ? (
         <>

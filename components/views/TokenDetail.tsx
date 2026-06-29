@@ -70,9 +70,9 @@ export function TokenDetail({ address }: { address: string }) {
           balance you hold from the Decrypt page.
         </p>
         <div className="mt-4 flex items-center justify-center gap-2">
-          <Link href="/" className="text-13 text-accent hover:underline">← Registry</Link>
+          <Link href="/" className="text-13 text-accentInk hover:underline">← Registry</Link>
           <span className="text-ink-ghost">·</span>
-          <Link href="/decrypt" className="text-13 text-accent hover:underline">Decrypt any token →</Link>
+          <Link href="/decrypt" className="text-13 text-accentInk hover:underline">Decrypt any token →</Link>
         </div>
       </Card>
     );
@@ -101,7 +101,7 @@ export function TokenDetail({ address }: { address: string }) {
           <svg viewBox="0 0 16 16" className="h-4 w-4 text-ink-ghost" fill="none" aria-hidden="true">
             <path d="M3 8h9M9 5l3 3-3 3" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
-          <span className="font-mono text-lg text-accent">{pair.wrapper.symbol ?? "cToken"}</span>
+          <span className="font-mono text-lg text-accentInk">{pair.wrapper.symbol ?? "cToken"}</span>
         </div>
         <div className="flex items-center gap-2">
           {pair.isValid ? <Badge tone="valid" dot>Active</Badge> : <Badge tone="revoked" dot>Revoked</Badge>}

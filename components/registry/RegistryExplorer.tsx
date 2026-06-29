@@ -148,7 +148,7 @@ function Stat({
   tone?: "neutral" | "accent" | "valid" | "revoked";
 }) {
   const valueColor =
-    tone === "accent" ? "text-accent" : tone === "valid" ? "text-ok" : tone === "revoked" ? "text-danger" : "text-ink";
+    tone === "accent" ? "text-accentInk" : tone === "valid" ? "text-ok" : tone === "revoked" ? "text-danger" : "text-ink";
   const numeric = value !== null && /^\d[\d,]*$/.test(value);
   return (
     <Card className="px-4 py-3">

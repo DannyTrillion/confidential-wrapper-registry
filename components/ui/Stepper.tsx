@@ -57,8 +57,8 @@ function Node({ done, active, errored, index }: { done: boolean; active: boolean
     <span
       className={cn(
         "grid place-items-center h-6 w-6 rounded-pill border text-2xs font-mono transition-colors duration-200",
-        done && "border-accent/40 bg-accent text-base",
-        active && "border-accent/40 bg-accent-faint text-accent",
+        done && "border-accent/40 bg-accent text-[#0a0a0a]",
+        active && "border-accent/40 bg-accent-faint text-accentInk",
         errored && "border-danger/40 bg-danger/10 text-danger",
         !done && !active && !errored && "border-line bg-raised text-ink-faint",
       )}

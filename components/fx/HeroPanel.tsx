@@ -43,7 +43,7 @@ export function HeroPanel({ className }: { className?: string }) {
         <DecryptDemo />
         <button
           onClick={() => connectors[0] && connect({ connector: connectors[0] })}
-          className="group mt-3 w-full flex items-center justify-center gap-1.5 text-2xs text-ink-faint hover:text-accent transition-colors"
+          className="group mt-3 w-full flex items-center justify-center gap-1.5 text-2xs text-ink-faint hover:text-accentInk transition-colors"
         >
           Connect your wallet to see your balances
           <span className="transition-transform group-hover:translate-x-0.5">→</span>
@@ -156,7 +156,7 @@ function Frame({
         <span
           className={cn(
             "inline-flex items-center gap-1.5 rounded-pill border px-2 py-0.5 text-[10px] font-medium tracking-wide",
-            accent ? "border-accent/30 bg-accent-faint text-accent" : "border-line bg-raised text-ink-faint",
+            accent ? "border-accent/30 bg-accent-faint text-accentInk" : "border-line bg-raised text-ink-faint",
           )}
         >
           {badge}
@@ -175,7 +175,7 @@ function RevealCta({ onClick, label }: { onClick: () => void; label: string }) {
       <span className="pointer-events-none absolute -inset-1 rounded-pill bg-accent/25 blur-md animate-breathe" aria-hidden="true" />
       <button
         onClick={onClick}
-        className="btn-sheen relative w-full h-9 rounded-pill bg-accent text-base text-13 font-semibold inline-flex items-center justify-center gap-1.5 active:scale-[0.97] transition-transform overflow-hidden"
+        className="btn-sheen relative w-full h-9 rounded-pill bg-accent text-[#0a0a0a] text-13 font-semibold inline-flex items-center justify-center gap-1.5 active:scale-[0.97] transition-transform overflow-hidden"
       >
         <KeyIcon />
         {label}

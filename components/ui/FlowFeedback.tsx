@@ -46,7 +46,7 @@ export function FlowFeedback({
                 href={explorerTxUrl(chainId, txHash)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-2xs font-mono text-ink-faint hover:text-accent transition-colors"
+                className="text-2xs font-mono text-ink-faint hover:text-accentInk transition-colors"
               >
                 {txHash.slice(0, 10)}…{txHash.slice(-8)} ↗
               </a>
