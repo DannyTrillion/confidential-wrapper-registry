@@ -66,13 +66,13 @@ export function TokenDetail({ address }: { address: string }) {
       <Card className="px-4 py-12 text-center">
         <h2 className="text-sm font-medium text-ink">Not a registered pair on {net.name}</h2>
         <p className="mt-1.5 text-13 text-ink-faint max-w-md mx-auto">
-          This address isn&apos;t in the {net.name} registry. You can still decrypt any ERC-7984
-          balance you hold from the Decrypt page.
+          This address isn&apos;t in the {net.name} registry. You can still reveal any ERC-7984
+          balance you hold from the Reveal page.
         </p>
         <div className="mt-4 flex items-center justify-center gap-2">
           <Link href="/" className="text-13 text-accentInk hover:underline">← Registry</Link>
           <span className="text-ink-ghost">·</span>
-          <Link href="/decrypt" className="text-13 text-accentInk hover:underline">Decrypt any token →</Link>
+          <Link href="/reveal" className="text-13 text-accentInk hover:underline">Reveal any token →</Link>
         </div>
       </Card>
     );
@@ -205,7 +205,7 @@ export function TokenDetail({ address }: { address: string }) {
               <Badge tone="revoked" dot>Revoked</Badge>
               <p className="mt-3 text-13 text-ink-muted max-w-sm mx-auto">
                 This pair was revoked in the registry. Wrapping and unwrapping are disabled to protect
-                users; the record stays on-chain and you can still decrypt any existing balance.
+                users; the record stays on-chain and you can still reveal any existing balance.
               </p>
               <div className="mt-4 max-w-sm mx-auto text-left">
                 <DecryptPanel pair={pair} chainId={chainId} />

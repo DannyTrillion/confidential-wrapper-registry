@@ -41,7 +41,7 @@ const STEPS: Step[] = [
     body: "Every confidential balance you hold, in one place. The amounts stay hidden on-screen until you choose to reveal them — just for you.",
   },
   {
-    target: "nav-/decrypt",
+    target: "nav-/reveal",
     mood: "think",
     title: "Reveal",
     body: "Check the real amount of any confidential token. You approve it once with your wallet, and only you can read the result.",

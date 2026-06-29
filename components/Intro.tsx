@@ -20,7 +20,7 @@ export function Intro() {
         {/* Keyword tagline */}
         <p className="mt-4 text-lg text-ink-muted leading-snug">
           Every wrapper, <span className="text-ink font-medium">onchain</span>. Every balance{" "}
-          <span className="text-accentInk font-medium">encrypted</span> — until you decrypt.
+          <span className="text-accentInk font-medium">encrypted</span> — until you reveal.
         </p>
 
         <p className="mt-3 text-sm text-ink-faint max-w-xl leading-relaxed">

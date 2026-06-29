@@ -3,7 +3,7 @@
 A production-grade web app that turns Zama's official onchain **Confidential Token
 Wrappers Registry** into a usable product. Browse every ERC-20 → ERC-7984 wrapper
 pair on **Sepolia and Ethereum mainnet**, wrap public tokens into confidential
-balances, decrypt your own balance with a single signature, unwrap back, and
+balances, reveal your own balance with a single signature, unwrap back, and
 faucet test tokens on Sepolia.
 
 Built for the **Zama Developer Program — Season 3 Bounty Track**.
@@ -13,7 +13,7 @@ Built for the **Zama Developer Program — Season 3 Bounty Track**.
 
 ![Registry Explorer](docs/explorer.png)
 
-Per-pair actions live in a drawer with Overview / Decrypt / Wrap / Unwrap / Faucet
+Per-pair actions live in a drawer with Overview / Reveal / Wrap / Unwrap / Faucet
 tabs. Every state — including "connect your wallet" and revoked pairs — is designed.
 
 <img src="docs/drawer.png" alt="Pair action drawer" width="380" />
@@ -44,8 +44,8 @@ Beyond the four required features, the app adds judging-grade UX depth:
 
 | | Feature | Summary |
 |---|---------|---------|
-| 5 | **My Balances portfolio** | Reads every confidential balance you hold across the registry in one multicall and decrypts them **all with a single signature** (one cached session), each resolving with the cascade. Includes a **"decrypt any ERC-7984"** paste-an-address box for tokens outside the registry. |
-| 6 | **Onboarding** | First-run Sepolia guide — Faucet → Wrap → Decrypt — that deep-links into the right drawer tab so the full confidential loop is three clicks away. |
+| 5 | **My Balances portfolio** | Reads every confidential balance you hold across the registry in one multicall and reveals them **all with a single signature** (one cached session), each resolving with the cascade. Includes a **"reveal any ERC-7984"** paste-an-address box for tokens outside the registry. |
+| 6 | **Onboarding** | First-run Sepolia guide — Faucet → Wrap → Reveal — that deep-links into the right drawer tab so the full confidential loop is three clicks away. |
 | 7 | **Resilient unwrap** | The two-phase unwrap persists its request before finalizing, so a failed phase-2 is **resumable** — burned funds are never stranded. |
 | 8 | **Global toasts** | Staged tx notifications with explorer links, in an ARIA live region. |
 
@@ -120,7 +120,7 @@ SEPOLIA_RPC_URL=<rpc> DEPLOYER_PRIVATE_KEY=0x<key> npm run deploy:custom
 ```
 
 (Script: [`contracts/scripts/deploy-custom-pair.ts`](contracts/scripts/deploy-custom-pair.ts).)
-Either way the pair shows up with resolved metadata and full wrap/unwrap/decrypt
+Either way the pair shows up with resolved metadata and full wrap/unwrap/reveal
 support, tagged "Local". Adding a whole new network is a one-object edit in
 [`lib/networks.ts`](lib/networks.ts) plus a relayer config in
 [`lib/fhevm/instance.ts`](lib/fhevm/instance.ts).
@@ -219,7 +219,7 @@ Etherscan-density tables that collapse to cards on mobile. Encrypted balances ar
 *live* cycling ciphertext that resolve via a left-to-right **decryption cascade**;
 a breathing aurora over a faint drifting hex field sets the tone; token avatars
 are deterministic hash **seals**; a **⌘K command palette** and a **My Balances**
-portfolio (decrypt-all in one signature) round it out. Every async action has four
+portfolio (reveal-all in one signature) round it out. Every async action has four
 explicit states (idle → pending with plain-words progress → success → error with a
 human message + raw collapsible), mirrored into global toasts. Designed
 empty/zero/error states. Accessibility: visible yellow focus rings, drawer

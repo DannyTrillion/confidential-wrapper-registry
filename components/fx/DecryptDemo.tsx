@@ -49,7 +49,7 @@ export function DecryptDemo({ className }: { className?: string }) {
             revealed ? "border-accent/30 bg-accent-faint text-accentInk" : "border-line bg-raised text-ink-faint",
           )}
         >
-          {revealed ? "DECRYPTED" : "ENCRYPTED"}
+          {revealed ? "REVEALED" : "ENCRYPTED"}
         </span>
       </div>
 

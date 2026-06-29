@@ -34,7 +34,7 @@ export const NAV_ITEMS: NavItem[] = [
     ),
   },
   {
-    href: "/decrypt",
+    href: "/reveal",
     label: "Reveal",
     icon: (
       <svg viewBox="0 0 18 18" className={cls} fill="none" aria-hidden="true">

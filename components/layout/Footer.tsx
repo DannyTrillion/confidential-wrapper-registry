@@ -24,7 +24,7 @@ export function Footer() {
             </div>
             <p className="mt-2 text-2xs text-ink-faint leading-relaxed">
               A usable product on Zama&apos;s onchain Wrappers Registry. Encrypted balances stay
-              encrypted — decryption happens client-side, gated by your signature.
+              encrypted — revealed client-side, only with your signature.
             </p>
             <div className="mt-3 flex items-center gap-3 text-2xs">
               {GITHUB && <FooterLink href={GITHUB}>GitHub ↗</FooterLink>}

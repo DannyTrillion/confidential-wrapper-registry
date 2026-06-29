@@ -23,7 +23,7 @@ const connectors = [
           showQrModal: true,
           metadata: {
             name: "Confidential Wrapper Registry",
-            description: "Wrap, unwrap, and decrypt ERC-7984 confidential tokens.",
+            description: "Wrap, unwrap, and reveal ERC-7984 confidential tokens.",
             url: "https://localhost",
             icons: [],
           },

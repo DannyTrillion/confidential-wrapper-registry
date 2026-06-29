@@ -47,9 +47,9 @@ export function humanizeError(err: unknown): string {
   if (lower.includes("user rejected") || lower.includes("user denied") || lower.includes("rejected the request"))
     return "You rejected the request in your wallet.";
   if (lower.includes("handle is not initialized"))
-    return "This balance was never initialized — there's nothing to decrypt yet.";
+    return "This balance was never initialized — there's nothing to reveal yet.";
   if (lower.includes("is not authorized to user decrypt"))
-    return "Your wallet isn't authorized to decrypt this value.";
+    return "Your wallet isn't authorized to reveal this value.";
   if (lower.includes("insufficient funds"))
     return "Insufficient ETH to cover gas for this transaction.";
   if (lower.includes("chainid should be same as current chainid"))
@@ -61,7 +61,7 @@ export function humanizeError(err: unknown): string {
   if (lower.includes("nonce"))
     return "Transaction nonce error — reset your wallet's activity or try again.";
   if (lower.includes("relayer") || lower.includes("gateway"))
-    return "The decryption relayer returned an error. Please retry in a moment.";
+    return "The reveal service returned an error. Please retry in a moment.";
   if (lower.includes("timeout") || lower.includes("timed out"))
     return "The request timed out. Check your connection and retry.";
 
