@@ -4,14 +4,8 @@ export function Intro() {
   return (
     <section className="mb-7 sm:mb-9 flex flex-col lg:flex-row lg:items-center justify-between gap-7 lg:gap-8">
       <div className="min-w-0 max-w-2xl">
-        {/* Ecosystem trust signal */}
-        <span className="inline-flex items-center gap-1.5 rounded-pill border border-accent/25 bg-accent-faint px-2.5 py-1 text-2xs font-medium text-accentInk">
-          <span className="h-1.5 w-1.5 rounded-pill bg-accent" />
-          Powered by Zama Protocol
-        </span>
-
         {/* Two-tone display headline — second line outlined (BlindPay signature). */}
-        <h1 className="mt-4 text-4xl sm:text-5xl font-bold tracking-tight leading-[1.05]">
+        <h1 className="text-4xl sm:text-5xl font-bold tracking-tight leading-[1.05]">
           <span className="text-ink">Confidential</span>
           <br />
           <span className="text-outline">Wrapper Registry.</span>
