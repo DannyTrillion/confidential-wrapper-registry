@@ -13,10 +13,15 @@ Built for the **Zama Developer Program — Season 3 Bounty Track**.
 
 ![Registry Explorer](docs/explorer.png)
 
-Per-pair actions live on a dedicated token page with Reveal / Wrap / Unwrap /
-Faucet tabs. Every state — disconnected, revoked, key-gated mainnet — is designed.
+The **Portfolio** is a dashboard: encrypted net worth, one-signature reveal-all,
+a hide-values toggle, and per-position reveal.
 
-<img src="docs/drawer.png" alt="Pair action drawer" width="380" />
+![Portfolio dashboard](docs/portfolio.png)
+
+The **Developer Kit** ships verified addresses, compile-checked snippets, a
+proof-of-lifecycle receipts table, and an on-chain pair builder.
+
+![Developer Kit](docs/developers.png)
 
 ### Design language — "Every balance encrypted. Until you reveal."
 
