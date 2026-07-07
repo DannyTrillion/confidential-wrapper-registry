@@ -10,8 +10,8 @@ and developer kit for ERC-20 ↔ ERC-7984 confidential tokens, with every flow r
 
 ## Live
 
-- **App:** <!-- fill: deployed URL -->
-- **Repo:** <!-- fill: GitHub URL -->
+- **App:** https://confidential-wrapper-registry-eta.vercel.app
+- **Repo:** https://github.com/DannyTrillion/confidential-wrapper-registry
 - **Demo video:** <!-- fill: video URL -->
 
 ## What it does

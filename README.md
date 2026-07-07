@@ -8,7 +8,7 @@ faucet test tokens on Sepolia.
 
 Built for the **Zama Developer Program — Season 3 Bounty Track**.
 
-> **Live demo:** https://confidential-wrapper-registry.vercel.app
+> **Live demo:** https://confidential-wrapper-registry-eta.vercel.app
 > **Networks:** Sepolia (`11155111`) · Ethereum mainnet (`1`)
 
 ![Registry Explorer](docs/explorer.png)
