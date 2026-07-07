@@ -242,7 +242,7 @@ export function CommandPalette({
                           isActive ? "bg-raised" : "hover:bg-raised/60",
                         )}
                       >
-                        {isActive && <span className="absolute left-0 inset-y-1.5 w-[2px] rounded-pill bg-accent" />}
+                        {isActive && <span className="absolute left-0 inset-y-1.5 w-[2px] rounded-pill bg-ink" />}
                         <ItemIcon kind={it.icon} active={isActive} />
                         <span className={cn("flex-1 text-13 truncate", isActive ? "text-ink" : "text-ink-muted")}>
                           {it.label}
@@ -294,7 +294,7 @@ function Key({ children }: { children: ReactNode }) {
 }
 
 function ItemIcon({ kind, active }: { kind: Item["icon"]; active: boolean }) {
-  const cls = cn("h-3.5 w-3.5 shrink-0", active ? "text-accentInk" : "text-ink-faint");
+  const cls = cn("h-3.5 w-3.5 shrink-0", active ? "text-ink" : "text-ink-faint");
   if (kind === "network")
     return (
       <svg viewBox="0 0 16 16" className={cls} fill="none" aria-hidden="true">

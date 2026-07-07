@@ -45,9 +45,9 @@ export function DecryptPanel({ pair, chainId }: { pair: EnrichedPair; chainId: S
   if (!net.supportsDecryption) {
     return (
       <PanelNote>
-        Revealing a confidential balance isn&apos;t available on{" "}
-        <span className="text-ink">{net.name}</span> in this app. Switch to a supported network up top
-        to reveal balances.
+        Revealing on <span className="text-ink">{net.name}</span> requires a Zama relayer API key —
+        set <span className="font-mono text-ink-muted">NEXT_PUBLIC_ZAMA_RELAYER_API_KEY</span> and
+        rebuild, or switch to Sepolia up top where no key is needed.
       </PanelNote>
     );
   }

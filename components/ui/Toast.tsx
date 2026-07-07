@@ -134,7 +134,7 @@ function ToastCard({ toast, onDismiss }: { toast: Toast; onDismiss: () => void }
             href={explorerTxUrl(toast.chainId, toast.txHash)}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block mt-1 text-2xs font-mono text-ink-faint hover:text-accentInk transition-colors"
+            className="inline-block mt-1 text-2xs font-mono text-ink-faint hover:text-ink transition-colors"
           >
             {toast.txHash.slice(0, 10)}…{toast.txHash.slice(-8)} ↗
           </a>

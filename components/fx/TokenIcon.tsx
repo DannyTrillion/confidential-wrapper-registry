@@ -30,7 +30,7 @@ export function TokenIcon({
       className={cn(
         "relative grid place-items-center shrink-0 rounded-full border overflow-hidden transition duration-200 group-hover/token:scale-110",
         confidential
-          ? "border-accent/30 bg-accent-faint group-hover/token:ring-2 group-hover/token:ring-accent/25"
+          ? "border-line-strong bg-elevate/[0.06] group-hover/token:ring-2 group-hover/token:ring-cipher/25"
           : "border-line bg-raised group-hover/token:ring-2 group-hover/token:ring-elevate/15",
         className,
       )}
@@ -48,14 +48,14 @@ export function TokenIcon({
         />
       ) : (
         <span
-          className={cn("font-mono font-semibold tracking-tight leading-none", confidential ? "text-accentInk" : "text-ink-muted")}
+          className={cn("font-mono font-semibold tracking-tight leading-none", confidential ? "text-ink" : "text-ink-muted")}
           style={{ fontSize: Math.max(7, size * 0.3) }}
         >
           {tokenMonogram(symbol)}
         </span>
       )}
       {confidential && (
-        <span className="pointer-events-none absolute inset-0 rounded-full ring-1 ring-inset ring-accent/20" aria-hidden="true" />
+        <span className="pointer-events-none absolute inset-0 rounded-full ring-1 ring-inset ring-cipher/20" aria-hidden="true" />
       )}
     </span>
   );

@@ -26,6 +26,8 @@ const config: Config = {
         base: "rgb(var(--base) / <alpha-value>)",
         surface: "rgb(var(--surface) / <alpha-value>)",
         raised: "rgb(var(--raised) / <alpha-value>)",
+        // Inset input wells — darker than the card they sit on (jup.ag style).
+        well: "rgb(var(--well) / <alpha-value>)",
         // Elevation overlay (white on dark, black on light) for hover/active washes.
         elevate: "rgb(var(--overlay) / <alpha-value>)",
         // The one accent (bright yellow on dark, deeper amber on light for contrast).
@@ -36,6 +38,12 @@ const config: Config = {
         },
         // Accent for TEXT/links/icons — readable per theme (gold on light).
         accentInk: "rgb(var(--accent-ink) / <alpha-value>)",
+        // Cool "cipher" cue — used ONLY for confidential/encrypted signals.
+        cipher: {
+          DEFAULT: "rgb(var(--cipher) / <alpha-value>)",
+          soft: "rgb(var(--cipher) / 0.12)",
+          faint: "rgb(var(--cipher) / 0.06)",
+        },
         // Status — muted, semantic only.
         ok: "rgb(var(--ok) / <alpha-value>)",
         danger: "rgb(var(--danger) / <alpha-value>)",
@@ -49,32 +57,47 @@ const config: Config = {
         },
         // 1px hairline borders.
         line: {
-          DEFAULT: "rgb(var(--line) / 0.08)",
-          strong: "rgb(var(--line) / 0.12)",
+          DEFAULT: "rgb(var(--line) / 0.09)",
+          strong: "rgb(var(--line) / 0.14)",
         },
       },
       fontFamily: {
-        // Inter for UI, JetBrains Mono for all addresses/hashes/amounts/numbers.
-        sans: ["var(--font-inter)", "system-ui", "sans-serif"],
-        mono: ["var(--font-jetbrains-mono)", "ui-monospace", "monospace"],
+        // Geist for UI, Geist Mono for all addresses/hashes/amounts/numbers.
+        sans: ["var(--font-geist-sans)", "system-ui", "sans-serif"],
+        mono: ["var(--font-geist-mono)", "ui-monospace", "monospace"],
       },
       fontSize: {
-        // Developer density: 13–14px body in tables.
-        "2xs": ["11px", { lineHeight: "16px", letterSpacing: "0.01em" }],
-        xs: ["12px", { lineHeight: "16px" }],
-        "13": ["13px", { lineHeight: "18px" }],
-        sm: ["14px", { lineHeight: "20px" }],
-        base: ["15px", { lineHeight: "22px" }],
-        lg: ["17px", { lineHeight: "24px" }],
-        xl: ["20px", { lineHeight: "28px" }],
-        "2xl": ["24px", { lineHeight: "30px", letterSpacing: "-0.01em" }],
-        "3xl": ["30px", { lineHeight: "36px", letterSpacing: "-0.02em" }],
+        // Developer density for body/tables; large sizes tighten tracking and
+        // leading the way Geist display type is meant to be set (Vercel-grade).
+        "2xs": ["12px", { lineHeight: "16px", letterSpacing: "0.01em" }],
+        xs: ["13px", { lineHeight: "18px" }],
+        "13": ["14px", { lineHeight: "20px" }],
+        sm: ["15px", { lineHeight: "22px" }],
+        base: ["16px", { lineHeight: "24px" }],
+        lg: ["18px", { lineHeight: "26px", letterSpacing: "-0.01em" }],
+        xl: ["20px", { lineHeight: "28px", letterSpacing: "-0.015em" }],
+        "2xl": ["24px", { lineHeight: "30px", letterSpacing: "-0.02em" }],
+        "3xl": ["30px", { lineHeight: "34px", letterSpacing: "-0.025em" }],
+        "4xl": ["38px", { lineHeight: "40px", letterSpacing: "-0.03em" }],
+        "5xl": ["50px", { lineHeight: "1.04", letterSpacing: "-0.035em" }],
+        "6xl": ["64px", { lineHeight: "1.0", letterSpacing: "-0.04em" }],
       },
       borderRadius: {
-        // BlindPay-style generous rounding.
-        card: "16px",
-        input: "12px",
+        // jup.ag-generous rounding: soft instrument panels, crisp inputs.
+        card: "14px",
+        input: "10px",
         pill: "9999px",
+      },
+      boxShadow: {
+        // Premium, restrained elevation — barely-there on dark, real lift on
+        // light. Layered (contact + ambient) the way polished product UIs do it.
+        card: "0 1px 2px rgb(0 0 0 / 0.04), 0 8px 24px -14px rgb(0 0 0 / 0.30)",
+        "card-hover": "0 2px 6px rgb(0 0 0 / 0.06), 0 18px 44px -18px rgb(0 0 0 / 0.42)",
+        pop: "0 14px 44px -10px rgb(0 0 0 / 0.50)",
+        // Accent halo for the primary CTA — jup.ag's glowing-button treatment
+        // in Zama yellow. Ring + soft ambient bloom.
+        glow: "0 0 0 1px rgb(var(--accent) / 0.35), 0 4px 20px -6px rgb(var(--accent) / 0.40)",
+        "glow-strong": "0 0 0 1px rgb(var(--accent) / 0.50), 0 6px 28px -6px rgb(var(--accent) / 0.55)",
       },
       fontFeatureSettings: {
         tnum: '"tnum", "cv01"',
@@ -103,17 +126,18 @@ const config: Config = {
           "0%": { opacity: "0", transform: "translateY(2px)" },
           "100%": { opacity: "1", transform: "translateY(0)" },
         },
-        // The decrypt reveal: blur→sharp, one soft accent glow, then still.
+        // The decrypt reveal: blur→sharp, one soft IDENTITY-yellow glow, then
+        // still — the masked→revealed moment is a sanctioned yellow spot.
         "decrypt-reveal": {
           "0%": { filter: "blur(6px)", opacity: "0.4" },
-          "55%": { filter: "blur(0)", opacity: "1", textShadow: "0 0 14px rgba(255,210,8,0.45)", color: "#FFE25A" },
+          "55%": { filter: "blur(0)", opacity: "1", textShadow: "0 0 14px rgba(255,210,8,0.5)", color: "currentColor" },
           "100%": { filter: "blur(0)", opacity: "1", textShadow: "0 0 0 rgba(255,210,8,0)" },
         },
-        // One-shot accent glow when a value finishes decrypting.
+        // One-shot identity glow when a value finishes decrypting.
         unlock: {
-          "0%": { textShadow: "0 0 0 rgba(255,210,8,0)", color: "#FFD208" },
-          "30%": { textShadow: "0 0 18px rgba(255,210,8,0.45)", color: "#FFE25A" },
-          "100%": { textShadow: "0 0 0 rgba(255,210,8,0)", color: "#EDEDEF" },
+          "0%": { textShadow: "0 0 0 rgba(255,210,8,0)", color: "currentColor" },
+          "30%": { textShadow: "0 0 18px rgba(255,210,8,0.5)", color: "currentColor" },
+          "100%": { textShadow: "0 0 0 rgba(255,210,8,0)", color: "currentColor" },
         },
         // Staggered row/content entrance — fade + tiny rise.
         "rise-in": {

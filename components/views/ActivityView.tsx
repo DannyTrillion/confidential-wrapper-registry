@@ -9,7 +9,7 @@ import { formatAmount, truncateAddress } from "@/lib/format";
 import { Card } from "@/components/ui/Card";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { PageGuide } from "@/components/learn/PageGuide";
-import { PageHeader } from "./BalancesView";
+import { PageHeader } from "./PageHeader";
 import { cn } from "@/lib/cn";
 
 type Filter = "all" | "wrap" | "transfer" | "unwrap" | "registry";
@@ -47,6 +47,7 @@ export function ActivityView() {
   return (
     <div className="space-y-5">
       <PageHeader
+        eyebrow="Live feed"
         title="Activity"
         subtitle={`A live feed of what's happening across the ${net.name} registry — every wrap, confidential send, unwrap, and registry change, read straight from the blockchain.`}
       />
@@ -106,7 +107,7 @@ export function ActivityView() {
                 onClick={() => setFilter(f.key)}
                 className={cn(
                   "inline-flex items-center gap-1.5 h-7 px-3 rounded-pill text-2xs font-medium transition-colors duration-150",
-                  filter === f.key ? "bg-accent-soft text-accentInk" : "text-ink-faint hover:text-ink-muted",
+                  filter === f.key ? "bg-elevate/[0.10] text-ink" : "text-ink-faint hover:text-ink-muted",
                 )}
               >
                 {f.label}
@@ -194,7 +195,7 @@ function Row({ item, chainId }: { item: GlobalActivityItem; chainId: number }) {
         href={explorerTxUrl(chainId, item.txHash)}
         target="_blank"
         rel="noopener noreferrer"
-        className="text-2xs text-ink-faint hover:text-accentInk transition-colors shrink-0"
+        className="text-2xs text-ink-faint hover:text-ink transition-colors shrink-0"
       >
         tx ↗
       </a>
@@ -208,7 +209,7 @@ function Addr({ chainId, addr, prefix }: { chainId: number; addr: string; prefix
       href={explorerAddressUrl(chainId, addr)}
       target="_blank"
       rel="noopener noreferrer"
-      className="hover:text-accentInk transition-colors"
+      className="hover:text-ink transition-colors"
       title={addr}
     >
       {prefix}
@@ -220,7 +221,7 @@ function Addr({ chainId, addr, prefix }: { chainId: number; addr: string; prefix
 function Glyph({ type }: { type: GlobalActivityItem["type"] }) {
   const cls = cn(
     "grid place-items-center h-8 w-8 rounded-pill border shrink-0",
-    type === "revoked" ? "border-danger/25 bg-danger/10 text-danger" : "border-accent/25 bg-accent-faint text-accentInk",
+    type === "revoked" ? "border-danger/25 bg-danger/10 text-danger" : "border-line-strong bg-elevate/[0.06] text-ink",
   );
   return (
     <span className={cls}>

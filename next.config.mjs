@@ -1,9 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  // The Reveal page moved from /decrypt → /reveal; keep old links/bookmarks working.
+  // The standalone Reveal page was folded into My Balances. Keep old links and
+  // bookmarks working (including the original /decrypt path).
   async redirects() {
-    return [{ source: "/decrypt", destination: "/reveal", permanent: true }];
+    return [
+      { source: "/reveal", destination: "/balances", permanent: true },
+      { source: "/decrypt", destination: "/balances", permanent: true },
+    ];
   },
   webpack: (config) => {
     // The relayer SDK bundle ships WASM and expects these to be optional in the browser.

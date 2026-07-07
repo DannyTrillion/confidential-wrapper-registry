@@ -3,6 +3,7 @@
 import { NETWORKS } from "@/lib/networks";
 import { truncateAddress } from "@/lib/format";
 import { BrandGlyph } from "./BrandGlyph";
+import { TOUR_START_EVENT } from "@/components/onboarding/OnboardingTour";
 
 // Set NEXT_PUBLIC_GITHUB_URL in .env.local to your public repo. The link only
 // renders when configured, so an unset value never ships a placeholder.
@@ -29,6 +30,12 @@ export function Footer() {
             <div className="mt-3 flex items-center gap-3 text-2xs">
               {GITHUB && <FooterLink href={GITHUB}>GitHub ↗</FooterLink>}
               <FooterLink href={DOCS}>Docs ↗</FooterLink>
+              <button
+                onClick={() => window.dispatchEvent(new Event(TOUR_START_EVENT))}
+                className="text-ink-faint hover:text-ink transition-colors"
+              >
+                Take a tour
+              </button>
             </div>
           </div>
 
@@ -40,7 +47,7 @@ export function Footer() {
                   href={`${net.explorerUrl}/address/${net.registry}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-1 inline-block font-mono text-2xs text-ink-muted hover:text-accentInk transition-colors"
+                  className="mt-1 inline-block font-mono text-2xs text-ink-muted hover:text-ink transition-colors"
                   title={net.registry}
                 >
                   {truncateAddress(net.registry, 8, 6)} ↗
@@ -61,7 +68,7 @@ export function Footer() {
 
 function FooterLink({ href, children }: { href: string; children: React.ReactNode }) {
   return (
-    <a href={href} target="_blank" rel="noopener noreferrer" className="text-ink-faint hover:text-accentInk transition-colors">
+    <a href={href} target="_blank" rel="noopener noreferrer" className="text-ink-faint hover:text-ink transition-colors">
       {children}
     </a>
   );

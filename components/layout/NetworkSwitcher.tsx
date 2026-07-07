@@ -29,7 +29,7 @@ export function NetworkSwitcher() {
                 active ? "bg-surface text-ink" : "text-ink-faint hover:text-ink-muted",
               )}
             >
-              <span className={cn("h-1.5 w-1.5 rounded-pill", active ? (net.isTestnet ? "bg-accent" : "bg-ok") : "bg-ink-ghost")} />
+              <span className={cn("h-1.5 w-1.5 rounded-pill", active ? (net.isTestnet ? "bg-ink-faint" : "bg-accent") : "bg-ink-ghost")} />
               {net.shortName}
             </button>
           );
@@ -58,7 +58,7 @@ function NetworkDropdown({ chainId, setChainId }: { chainId: SupportedChainId; s
         aria-label="Registry network"
         className="inline-flex items-center gap-1.5 h-8 px-2.5 rounded-input border border-line bg-raised text-2xs font-medium text-ink"
       >
-        <span className={cn("h-1.5 w-1.5 rounded-pill", active.isTestnet ? "bg-accent" : "bg-ok")} />
+        <span className={cn("h-1.5 w-1.5 rounded-pill", active.isTestnet ? "bg-ink-faint" : "bg-accent")} />
         {active.shortName}
         <svg viewBox="0 0 12 12" className="h-3 w-3 text-ink-faint" fill="none" aria-hidden="true">
           <path d="m3 4.5 3 3 3-3" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
@@ -78,7 +78,7 @@ function NetworkDropdown({ chainId, setChainId }: { chainId: SupportedChainId; s
                 net.chainId === chainId ? "text-ink bg-raised" : "text-ink-muted hover:bg-raised",
               )}
             >
-              <span className={cn("h-1.5 w-1.5 rounded-pill", net.isTestnet ? "bg-accent" : "bg-ok")} />
+              <span className={cn("h-1.5 w-1.5 rounded-pill", net.isTestnet ? "bg-ink-faint" : "bg-accent")} />
               {net.name}
             </button>
           ))}

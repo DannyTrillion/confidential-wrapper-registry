@@ -1,12 +1,6 @@
-import type { Metadata } from "next";
-import { ExtendView } from "@/components/views/ExtendView";
+import { redirect } from "next/navigation";
 
-export const metadata: Metadata = {
-  title: "Add a pair — Confidential Wrapper Registry",
-  description:
-    "Extend the registry: register an ERC-20 ↔ ERC-7984 pair on-chain, or declare a custom one locally. An interactive builder verifies the addresses and gives you the exact config line.",
-};
-
+/** The pair builder moved into the Developer Kit. */
 export default function Page() {
-  return <ExtendView />;
+  redirect("/developers#add-pair");
 }

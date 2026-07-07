@@ -1,19 +1,21 @@
 "use client";
 
 import { useMemo, useState, useRef, useEffect, type KeyboardEvent as ReactKeyboardEvent } from "react";
+import Link from "next/link";
+import { useAccount } from "wagmi";
 import { useExplorerNetwork } from "@/components/NetworkContext";
 import { useRegistryPairs } from "@/lib/registry/useRegistry";
+import { useMyBalances } from "@/lib/fhevm/useMyBalances";
+import { useSelectedPair } from "@/components/SelectedPairContext";
 import { getNetwork } from "@/lib/networks";
 import type { EnrichedPair } from "@/lib/registry/types";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
-import { Address } from "@/components/ui/Address";
 import { Skeleton } from "@/components/ui/Skeleton";
-import { TokenIdentity } from "./TokenIdentity";
+import { TokenIcon } from "@/components/fx/TokenIcon";
 import { AnimatedNumber } from "@/components/fx/AnimatedNumber";
 import { useFlip } from "@/lib/hooks/useFlip";
-import { useActiveRect } from "@/lib/hooks/useActiveRect";
 import { cn } from "@/lib/cn";
 
 type Filter = "all" | "active" | "revoked";
@@ -21,6 +23,11 @@ type Filter = "all" | "active" | "revoked";
 /** Action tabs a row can deep-link straight into on the token page. */
 export type TokenAction = "wrap" | "unwrap" | "reveal" | "faucet";
 
+/**
+ * jup.ag-style market list: a flat stat strip, a two-line section header with
+ * the toolbar inline, then borderless hover rows where each pair reads like a
+ * market — identity left, right-aligned stat stacks, actions on the end.
+ */
 export function RegistryExplorer({
   onOpenPair,
 }: {
@@ -28,7 +35,16 @@ export function RegistryExplorer({
 }) {
   const { chainId } = useExplorerNetwork();
   const net = getNetwork(chainId)!;
+  const { address, isConnected } = useAccount();
   const { data: pairs, isLoading, isError, error, refetch, isFetching } = useRegistryPairs(chainId);
+  const { data: holdings } = useMyBalances(chainId, address, pairs ?? []);
+  const { selected, setSelected } = useSelectedPair();
+
+  // Which pair indices the connected wallet holds a confidential balance in.
+  const heldIdx = useMemo(
+    () => new Set((holdings ?? []).map((h) => h.pair.index)),
+    [holdings],
+  );
 
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<Filter>("all");
@@ -66,9 +82,43 @@ export function RegistryExplorer({
         isTestnet={net.isTestnet}
         counts={counts}
         loading={isLoading}
+        holdingsCount={isConnected ? (holdings?.length ?? 0) : null}
       />
 
-      <Card>
+      <section className="space-y-5">
+        {/* Manifesto header — app-header scale, not marketing hero. */}
+        <div className="relative pt-1 sm:pt-2">
+          <span
+            className="pointer-events-none absolute -top-14 -left-20 h-[240px] w-[480px] rounded-full blur-3xl bg-[radial-gradient(closest-side,rgb(var(--overlay)/0.045),transparent)]"
+            aria-hidden="true"
+          />
+          <h2 className="relative text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-ink text-balance">
+            Every balance encrypted.
+            <br />
+            <span className="text-ink-faint">Until you reveal.</span>
+          </h2>
+          <p className="relative mt-2 text-13 text-ink-faint">
+            The onchain Wrapper Registry
+            <span className="text-ink-ghost"> · all wrappers redeem 1:1</span>
+          </p>
+          {/* Lifecycle coverage — the whole loop lives here, receipted. */}
+          <div className="relative mt-3.5 flex items-center gap-2 flex-wrap font-mono text-2xs uppercase tracking-[0.08em]">
+            {["Discover", "Wrap", "Reveal", "Unwrap"].map((step, i) => (
+              <span key={step} className="flex items-center gap-2">
+                {i > 0 && <span className="text-ink-ghost" aria-hidden="true">→</span>}
+                <span className="text-ink-muted">{step}</span>
+              </span>
+            ))}
+            <span className="text-ink-ghost" aria-hidden="true">·</span>
+            <Link
+              href="/developers#proof"
+              className="normal-case tracking-normal text-ink-faint hover:text-ink transition-colors"
+            >
+              full lifecycle, verified on Sepolia →
+            </Link>
+          </div>
+        </div>
+
         <Toolbar
           query={query}
           setQuery={setQuery}
@@ -79,58 +129,75 @@ export function RegistryExplorer({
           refreshing={isFetching && !isLoading}
         />
 
-        {isLoading ? (
-          <TableSkeleton />
-        ) : isError ? (
-          <ErrorState message={(error as Error)?.message} onRetry={() => refetch()} networkName={net.name} />
-        ) : counts.total === 0 ? (
-          <EmptyRegistry networkName={net.name} />
-        ) : visible.length === 0 ? (
-          <NoMatches query={query} onClear={() => { setQuery(""); setFilter("all"); }} />
-        ) : (
-          <PairTable pairs={visible} chainId={chainId} onManage={onOpenPair} />
-        )}
-      </Card>
+        <Card className="overflow-hidden">
+          {isLoading ? (
+            <ListSkeleton />
+          ) : isError ? (
+            <ErrorState message={(error as Error)?.message} onRetry={() => refetch()} networkName={net.name} />
+          ) : counts.total === 0 ? (
+            <EmptyRegistry networkName={net.name} />
+          ) : visible.length === 0 ? (
+            <NoMatches query={query} onClear={() => { setQuery(""); setFilter("all"); }} />
+          ) : (
+            <PairList
+              pairs={visible}
+              onManage={onOpenPair}
+              onSelect={setSelected}
+              selectedIndex={selected?.index ?? null}
+              heldIdx={heldIdx}
+            />
+          )}
+        </Card>
+      </section>
     </div>
   );
 }
 
 /* ------------------------------------------------------------------ stats */
 
+/** Flat hairline stat strip — the page's compact header: network identity, the
+ *  headline registry numbers, and (when connected) a one-line portfolio link. */
 function StatStrip({
   network,
   isTestnet,
   counts,
   loading,
+  holdingsCount,
 }: {
   network: string;
   isTestnet: boolean;
   counts: { total: number; valid: number; revoked: number };
   loading: boolean;
+  /** Connected wallet's encrypted-balance count; null when disconnected. */
+  holdingsCount: number | null;
 }) {
-  const total = Math.max(1, counts.total);
-  const activePct = (counts.valid / total) * 100;
-  const revokedPct = (counts.revoked / total) * 100;
   return (
-    <div className="space-y-3">
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <Stat label="Network" value={network} sub={isTestnet ? "Testnet" : "Mainnet"} tone="accent" />
-        <Stat label="Registered pairs" value={loading ? null : String(counts.total)} />
-        <Stat label="Active" value={loading ? null : String(counts.valid)} tone="valid" />
-        <Stat label="Revoked" value={loading ? null : String(counts.revoked)} tone="revoked" />
-      </div>
-      {/* Composition meter — at-a-glance registry health, muted on-theme tones. */}
-      {!loading && counts.total > 0 && (
-        <div className="flex items-center gap-3 px-1">
-          <div className="flex h-1 flex-1 overflow-hidden rounded-pill bg-elevate/[0.05]">
-            <div className="bg-accent/45 transition-all duration-500" style={{ width: `${activePct}%` }} />
-            <div className="bg-ink-faint/30 transition-all duration-500" style={{ width: `${revokedPct}%` }} />
-          </div>
-          <div className="flex items-center gap-3 text-2xs text-ink-faint shrink-0">
-            <span className="inline-flex items-center gap-1.5"><span className="h-1.5 w-1.5 rounded-pill bg-accent/70" />{counts.valid} active</span>
-            <span className="inline-flex items-center gap-1.5"><span className="h-1.5 w-1.5 rounded-pill bg-ink-faint/50" />{counts.revoked} revoked</span>
+    <div className="flex items-center gap-x-8 sm:gap-x-10 pt-1 overflow-x-auto">
+      <div className="flex items-center gap-2.5 shrink-0">
+        <svg viewBox="0 0 20 20" className="h-4 w-4 text-cipher shrink-0" fill="none" aria-hidden="true">
+          <rect x="4" y="9" width="12" height="7" rx="2" stroke="currentColor" strokeWidth="1.5" />
+          <path d="M6.5 9V7a3.5 3.5 0 1 1 7 0v2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+        </svg>
+        <div>
+          <div className="font-mono text-sm text-ink leading-tight">{network}</div>
+          <div className="text-2xs text-ink-ghost uppercase tracking-wide whitespace-nowrap">
+            {isTestnet ? "Testnet" : "Mainnet"} · Onchain registry
           </div>
         </div>
+      </div>
+      <Stat label="Wrapper pairs" value={counts.total} loading={loading} />
+      <Stat label="Active" value={counts.valid} loading={loading} tone="valid" />
+      <Stat label="Revoked" value={counts.revoked} loading={loading} tone="revoked" />
+
+      {holdingsCount != null && holdingsCount > 0 && (
+        <Link
+          href="/portfolio"
+          className="ml-auto shrink-0 inline-flex items-center gap-1.5 text-13 text-ink-faint hover:text-ink transition-colors whitespace-nowrap"
+        >
+          <span className="font-mono tabular-nums text-ink-muted">{holdingsCount}</span>
+          encrypted {holdingsCount === 1 ? "balance" : "balances"}
+          <span className="text-ink-muted">→ Open Portfolio</span>
+        </Link>
       )}
     </div>
   );
@@ -139,31 +206,33 @@ function StatStrip({
 function Stat({
   label,
   value,
-  sub,
+  loading,
   tone = "neutral",
 }: {
   label: string;
-  value: string | null;
-  sub?: string;
-  tone?: "neutral" | "accent" | "valid" | "revoked";
+  value: number;
+  loading: boolean;
+  tone?: "neutral" | "valid" | "revoked";
 }) {
-  const valueColor =
-    tone === "accent" ? "text-accentInk" : tone === "valid" ? "text-ok" : tone === "revoked" ? "text-danger" : "text-ink";
-  const numeric = value !== null && /^\d[\d,]*$/.test(value);
+  const color =
+    tone === "valid"
+      ? "text-accentInk"
+      : tone === "revoked"
+        ? value > 0
+          ? "text-danger"
+          : "text-ink-muted"
+        : "text-ink";
   return (
-    <Card className="px-4 py-3">
-      <div className="text-2xs text-ink-faint uppercase tracking-wide">{label}</div>
-      <div className="mt-1.5 flex items-baseline gap-2">
-        {value === null ? (
-          <Skeleton className="h-6 w-14" />
-        ) : (
-          <span className={cn("font-mono text-xl tabular-nums", valueColor)}>
-            {numeric ? <AnimatedNumber value={Number(value.replace(/,/g, ""))} /> : value}
-          </span>
-        )}
-        {sub && <span className="text-2xs text-ink-faint">{sub}</span>}
-      </div>
-    </Card>
+    <div className="flex flex-col gap-0.5 shrink-0">
+      {loading ? (
+        <Skeleton className="h-5 w-8" />
+      ) : (
+        <span className={cn("font-mono text-lg tabular-nums leading-none font-medium", color)}>
+          <AnimatedNumber value={value} />
+        </span>
+      )}
+      <span className="text-2xs text-ink-faint uppercase tracking-wide whitespace-nowrap">{label}</span>
+    </div>
   );
 }
 
@@ -193,8 +262,6 @@ function Toolbar({
   ];
 
   const inputRef = useRef<HTMLInputElement>(null);
-  const tabsRef = useRef<HTMLDivElement>(null);
-  const filterInd = useActiveRect(tabsRef, [filter]);
   // "/" focuses search (when not already typing somewhere).
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
@@ -209,9 +276,9 @@ function Toolbar({
   }, []);
 
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center gap-3 px-4 py-3 border-b border-line">
-      <div className="relative flex-1 min-w-0">
-        <svg viewBox="0 0 16 16" className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-ink-faint" fill="none" aria-hidden="true">
+    <div className="flex flex-col sm:flex-row sm:items-center gap-2.5">
+      <div className="relative flex-1 sm:flex-none sm:w-72 min-w-0">
+        <svg viewBox="0 0 16 16" className="absolute left-3.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-ink-faint" fill="none" aria-hidden="true">
           <circle cx="7" cy="7" r="4.5" stroke="currentColor" strokeWidth="1.4" />
           <path d="m11 11 3 3" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
         </svg>
@@ -221,36 +288,30 @@ function Toolbar({
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search symbol, name, or address…"
           aria-label="Search registry"
-          className="w-full h-9 pl-9 pr-9 rounded-input bg-base border border-line text-13 text-ink placeholder:text-ink-ghost focus-visible:border-accent/50 transition-colors"
+          className="w-full h-9 pl-9 pr-9 rounded-input bg-well border border-line text-13 text-ink placeholder:text-ink-ghost focus-visible:border-ink/40 transition-colors"
         />
         {!query && (
-          <kbd className="absolute right-3 top-1/2 -translate-y-1/2 font-mono text-2xs text-ink-ghost border border-line rounded-[3px] px-1 py-0.5 pointer-events-none">
+          <kbd className="absolute right-3.5 top-1/2 -translate-y-1/2 font-mono text-2xs text-ink-ghost border border-line rounded-[3px] px-1 py-0.5 pointer-events-none">
             /
           </kbd>
         )}
       </div>
 
-      <div className="flex items-center gap-2">
-        <div ref={tabsRef} role="tablist" className="relative inline-flex items-center p-0.5 rounded-input border border-line glass-soft">
-          <span
-            className="absolute rounded-[5px] bg-raised transition-all duration-250 ease-out"
-            style={{ left: filterInd.left, top: filterInd.top, width: filterInd.width, height: filterInd.height, opacity: filterInd.visible ? 1 : 0 }}
-            aria-hidden="true"
-          />
+      <div className="flex items-center gap-5 sm:gap-6 sm:pl-3">
+        <div role="tablist" className="flex items-center gap-5">
           {tabs.map((t) => (
             <button
               key={t.key}
               role="tab"
-              data-active={filter === t.key ? "true" : undefined}
               aria-selected={filter === t.key}
               onClick={() => setFilter(t.key)}
               className={cn(
-                "relative inline-flex items-center gap-1.5 h-7 px-2.5 rounded-[5px] text-2xs font-medium transition-colors duration-150",
-                filter === t.key ? "text-ink" : "text-ink-faint hover:text-ink-muted",
+                "inline-flex items-baseline gap-1.5 text-13 transition-colors duration-150 rounded-[4px]",
+                filter === t.key ? "text-ink font-semibold" : "text-ink-faint hover:text-ink-muted",
               )}
             >
               {t.label}
-              <span className="font-mono tabular-nums text-ink-faint">{t.count}</span>
+              <span className="font-mono text-2xs tabular-nums font-normal text-ink-ghost">{t.count}</span>
             </button>
           ))}
         </div>
@@ -267,20 +328,24 @@ function Toolbar({
   );
 }
 
-/* ------------------------------------------------------------------ table */
+/* ------------------------------------------------------------------- rows */
 
-function PairTable({
+function PairList({
   pairs,
-  chainId,
   onManage,
+  onSelect,
+  selectedIndex,
+  heldIdx,
 }: {
   pairs: EnrichedPair[];
-  chainId: number;
   onManage: (p: EnrichedPair, action?: TokenAction) => void;
+  onSelect: (p: EnrichedPair) => void;
+  selectedIndex: number | null;
+  heldIdx: Set<number>;
 }) {
   const [active, setActive] = useState(-1);
-  const bodyRef = useRef<HTMLTableSectionElement>(null);
-  // Surviving rows glide to fill gaps when filtering, so the table never jumps.
+  const bodyRef = useRef<HTMLDivElement>(null);
+  // Surviving rows glide to fill gaps when filtering, so the list never jumps.
   useFlip(bodyRef, [pairs.map((p) => p.index).join(",")]);
 
   // Keep the active index in range as the filtered list changes.
@@ -298,7 +363,7 @@ function PairTable({
       setActive((a) => Math.max((a < 0 ? 0 : a) - 1, 0));
     } else if (key === "Enter" && active >= 0) {
       e.preventDefault();
-      onManage(pairs[active]);
+      onSelect(pairs[active]);
     } else if (key === "Home") {
       e.preventDefault();
       setActive(0);
@@ -317,172 +382,226 @@ function PairTable({
 
   return (
     <>
-      {/* Desktop table */}
+      {/* Desktop market list */}
       <div
         id="registry-table"
-        className="hidden md:block focus-visible:ring-2 focus-visible:ring-accent rounded-card scroll-mt-24"
+        ref={bodyRef}
+        className="hidden md:block focus-visible:ring-2 focus-visible:ring-accent rounded-card scroll-mt-28 [mask-image:linear-gradient(to_bottom,black_calc(100%-88px),rgb(0_0_0/0.55))] [-webkit-mask-image:linear-gradient(to_bottom,black_calc(100%-88px),rgb(0_0_0/0.55))]"
         tabIndex={0}
         role="grid"
-        aria-label="Wrapper pairs — use arrow keys to navigate, Enter to open"
+        aria-label="Wrapper pairs — use arrow keys to navigate, Enter to open in the side panel"
         onKeyDown={onKeyDown}
         onBlur={() => setActive(-1)}
       >
-        <table className="w-full text-left">
-          <thead>
-            <tr className="text-2xs text-ink-faint uppercase tracking-wide">
-              <th className="font-medium px-4 py-2 w-10">#</th>
-              <th className="font-medium px-4 py-2">Underlying ERC-20</th>
-              <th className="font-medium px-4 py-2">Confidential wrapper</th>
-              <th className="font-medium px-4 py-2 text-right">Decimals</th>
-              <th className="font-medium px-4 py-2">Status</th>
-              <th className="font-medium px-4 py-2 text-right">Action</th>
-            </tr>
-          </thead>
-          <tbody ref={bodyRef}>
-            {pairs.map((p, i) => (
-              <tr
-                key={p.index}
-                data-row={i}
-                data-flip={p.index}
-                onMouseEnter={() => setActive(i)}
+        {pairs.map((p, i) => {
+          const isSel = selectedIndex === p.index;
+          const held = heldIdx.has(p.index);
+          return (
+            <div
+              key={p.index}
+              role="row"
+              data-row={i}
+              data-flip={p.index}
+              onMouseEnter={() => setActive(i)}
+              onClick={() => onSelect(p)}
+              className={cn(
+                "relative grid items-center gap-3 px-4 py-4 cursor-pointer group transition-colors animate-rise-in",
+                "grid-cols-[minmax(0,1fr)_120px_130px_300px]",
+                i > 0 && "border-t border-elevate/[0.05]",
+                isSel ? "bg-accent/[0.05]" : active === i ? "bg-raised/50" : "hover:bg-raised/40",
+                !p.isValid && "opacity-70",
+              )}
+              style={{ animationDelay: `${Math.min(i * 22, 320)}ms` }}
+            >
+              {/* Accent bar — cipher when selected, neutral on hover/active. */}
+              <span
                 className={cn(
-                  "border-t border-line group transition-colors animate-rise-in",
-                  active === i ? "bg-raised/50" : "hover:bg-raised/40",
-                  !p.isValid && "opacity-70",
+                  "absolute left-0 inset-y-2 w-[2px] rounded-pill origin-top transition-all duration-200 ease-out",
+                  isSel
+                    ? "bg-accent scale-y-100 opacity-100"
+                    : active === i
+                      ? "bg-ink/40 scale-y-100 opacity-100"
+                      : "bg-ink/40 scale-y-0 opacity-0 group-hover:scale-y-100 group-hover:opacity-100",
                 )}
-                style={{ animationDelay: `${Math.min(i * 22, 320)}ms` }}
-              >
-                <td className="relative px-4 py-3 font-mono text-2xs text-ink-ghost tabular-nums">
-                  {/* Accent indicator — on hover or keyboard-active. */}
-                  <span
-                    className={cn(
-                      "absolute left-0 inset-y-0 w-[2px] bg-accent origin-top transition-all duration-200 ease-out group-hover:scale-y-100 group-hover:opacity-100",
-                      active === i ? "scale-y-100 opacity-100" : "scale-y-0 opacity-0",
-                    )}
-                  />
-                  {p.index}
-                </td>
-                <td className="px-4 py-3">
-                  <TokenIdentity meta={p.underlying} address={p.token} />
-                  <Address address={p.token} chainId={chainId} className="mt-1" />
-                </td>
-                <td className="px-4 py-3">
-                  <TokenIdentity meta={p.wrapper} address={p.confidentialToken} confidential />
-                  <Address address={p.confidentialToken} chainId={chainId} className="mt-1" />
-                </td>
-                <td className="px-4 py-3 text-right font-mono text-13 text-ink-muted tabular-nums">
-                  {p.underlying.decimals ?? "—"}
-                </td>
-                <td className="px-4 py-3">
-                  <div className="flex items-center gap-1.5">
-                    {p.isValid ? (
-                      <Badge tone="valid" dot>Active</Badge>
-                    ) : (
-                      <Badge tone="revoked" dot>Revoked</Badge>
-                    )}
-                    {p.source === "local" && <Badge tone="accent">Local</Badge>}
-                  </div>
-                </td>
-                <td className="px-4 py-3">
-                  <div className="flex items-center justify-end gap-1.5">
-                    {p.isValid ? (
-                      <>
-                        <Button size="sm" variant="secondary" onClick={() => onManage(p, "wrap")}>
-                          Wrap
-                        </Button>
-                        <Button size="sm" variant="secondary" onClick={() => onManage(p, "reveal")}>
-                          Reveal
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="secondary"
-                          aria-label="Open token details"
-                          className="!px-2"
-                          onClick={() => onManage(p)}
-                        >
-                          <OpenIcon />
-                        </Button>
-                      </>
-                    ) : (
-                      <Button size="sm" variant="secondary" onClick={() => onManage(p)}>
-                        Inspect
-                      </Button>
-                    )}
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                aria-hidden="true"
+              />
+
+              <PairIdentity pair={p} index={p.index} />
+
+              {/* Encrypted handle → masked dots, never a number. No handle (or no
+                  wallet) → muted em-dash — a confident 0 would be a lie here. */}
+              <StatCell
+                value={held ? <HeldMask /> : <span className="text-ink-ghost">—</span>}
+                label="Balance"
+              />
+
+              <div className="flex items-center justify-end gap-1 whitespace-nowrap">
+                {p.isValid ? (
+                  <Badge tone="valid" dot>Active</Badge>
+                ) : (
+                  <Badge tone="revoked" dot>Revoked</Badge>
+                )}
+                {p.source === "local" && <Badge tone="accent">Local</Badge>}
+              </div>
+
+              <div className="flex items-center justify-end gap-1.5 whitespace-nowrap" onClick={(e) => e.stopPropagation()}>
+                {p.isValid ? (
+                  <>
+                    <Button size="sm" variant="secondary" onClick={() => onManage(p, "wrap")}>
+                      Wrap
+                    </Button>
+                    <Button size="sm" variant="secondary" onClick={() => onManage(p, "unwrap")}>
+                      Unwrap
+                    </Button>
+                    <Button size="sm" variant="secondary" onClick={() => onManage(p, "reveal")}>
+                      Reveal
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="secondary"
+                      aria-label="Open token details"
+                      className="!px-2"
+                      onClick={() => onManage(p)}
+                    >
+                      <OpenIcon />
+                    </Button>
+                  </>
+                ) : (
+                  <Button size="sm" variant="secondary" onClick={() => onManage(p)}>
+                    Inspect
+                  </Button>
+                )}
+              </div>
+            </div>
+          );
+        })}
       </div>
 
       {/* Mobile cards */}
       <div className="md:hidden divide-y divide-line">
-        {pairs.map((p) => (
-          <div key={p.index} className={cn("p-4 space-y-3", !p.isValid && "opacity-70")}>
-            <div className="flex items-center justify-between">
-              <TokenIdentity meta={p.underlying} address={p.token} />
-              <div className="flex items-center gap-1.5">
-                {p.isValid ? <Badge tone="valid" dot>Active</Badge> : <Badge tone="revoked" dot>Revoked</Badge>}
-                {p.source === "local" && <Badge tone="accent">Local</Badge>}
+        {pairs.map((p) => {
+          const held = heldIdx.has(p.index);
+          return (
+            <div
+              key={p.index}
+              onClick={() => onSelect(p)}
+              className={cn(
+                "p-4 space-y-3 transition-colors",
+                selectedIndex === p.index && "bg-cipher-faint",
+                !p.isValid && "opacity-70",
+              )}
+            >
+              <div className="flex items-start justify-between gap-2">
+                <PairIdentity pair={p} index={p.index} />
+                <div className="flex items-center gap-1 whitespace-nowrap">
+                  {p.isValid ? <Badge tone="valid" dot>Active</Badge> : <Badge tone="revoked" dot>Revoked</Badge>}
+                  {p.source === "local" && <Badge tone="accent">Local</Badge>}
+                </div>
+              </div>
+              <MobileStat
+                value={held ? <HeldMask symbol={p.wrapper.symbol} /> : <span className="text-ink-ghost">—</span>}
+                label="Balance"
+              />
+              <div onClick={(e) => e.stopPropagation()}>
+                {p.isValid ? (
+                  <div className="flex items-center gap-2">
+                    <Button size="sm" variant="secondary" className="flex-1" onClick={() => onManage(p, "wrap")}>
+                      Wrap
+                    </Button>
+                    <Button size="sm" variant="secondary" className="flex-1" onClick={() => onManage(p, "unwrap")}>
+                      Unwrap
+                    </Button>
+                    <Button size="sm" variant="secondary" className="flex-1" onClick={() => onManage(p, "reveal")}>
+                      Reveal
+                    </Button>
+                    <Button size="sm" variant="secondary" aria-label="Open token details" className="!px-2.5" onClick={() => onManage(p)}>
+                      <OpenIcon />
+                    </Button>
+                  </div>
+                ) : (
+                  <Button size="sm" variant="secondary" className="w-full" onClick={() => onManage(p)}>
+                    Inspect
+                  </Button>
+                )}
               </div>
             </div>
-            <Address address={p.token} chainId={chainId} />
-            <div className="flex items-center gap-2 text-ink-ghost text-2xs">
-              <span className="h-px flex-1 bg-line" />
-              wraps into
-              <span className="h-px flex-1 bg-line" />
-            </div>
-            <TokenIdentity meta={p.wrapper} address={p.confidentialToken} confidential />
-            <Address address={p.confidentialToken} chainId={chainId} />
-            {p.isValid ? (
-              <div className="flex items-center gap-2">
-                <Button size="sm" variant="secondary" className="flex-1" onClick={() => onManage(p, "wrap")}>
-                  Wrap
-                </Button>
-                <Button size="sm" variant="secondary" className="flex-1" onClick={() => onManage(p, "reveal")}>
-                  Reveal
-                </Button>
-                <Button size="sm" variant="secondary" aria-label="Open token details" className="!px-2.5" onClick={() => onManage(p)}>
-                  <OpenIcon />
-                </Button>
-              </div>
-            ) : (
-              <Button size="sm" variant="secondary" className="w-full" onClick={() => onManage(p)}>
-                Inspect
-              </Button>
-            )}
-          </div>
-        ))}
+          );
+        })}
       </div>
     </>
   );
 }
 
+/** jup.ag-style pair identity: one token avatar with a small lock badge (the
+ *  wrapper is the same asset, made confidential), the pair spelled as
+ *  `PUB → cPRIV` in mono, the full token name beneath. */
+function PairIdentity({ pair, index }: { pair: EnrichedPair; index: number }) {
+  return (
+    <div className="flex items-center gap-3 min-w-0">
+      <span
+        className="relative flex shrink-0 transition-transform duration-200 ease-out group-hover:scale-105"
+        aria-hidden="true"
+      >
+        <TokenIcon symbol={pair.underlying.symbol} size={32} />
+        <span className="absolute -bottom-0.5 -right-1 grid place-items-center h-4 w-4 rounded-pill bg-surface border border-line transition-transform duration-200 ease-out group-hover:scale-110">
+          <svg viewBox="0 0 12 12" className="h-2.5 w-2.5 text-cipher" fill="none">
+            <rect x="2.5" y="5" width="7" height="5" rx="1.2" stroke="currentColor" strokeWidth="1.1" />
+            <path d="M4 5V3.8a2 2 0 0 1 4 0V5" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" />
+          </svg>
+        </span>
+      </span>
+      <div className="min-w-0">
+        <div className="flex items-center gap-1.5 font-mono text-13 leading-tight min-w-0">
+          <span className="text-ink truncate">{pair.underlying.symbol ?? "ERC-20"}</span>
+          <span className="text-ink-ghost shrink-0" aria-hidden="true">→</span>
+          <span className="text-ink-muted truncate">{pair.wrapper.symbol ?? "cToken"}</span>
+          <span className="hidden lg:inline font-mono text-2xs text-ink-ghost shrink-0">#{index}</span>
+        </div>
+        <div className="mt-0.5 text-2xs text-ink-faint truncate">
+          {pair.underlying.name ?? "—"}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/** Right-aligned value-over-label stack, jup.ag market-row style. */
+function StatCell({ value, label }: { value: React.ReactNode; label: string }) {
+  return (
+    <div className="text-right">
+      <div className="font-mono text-13 text-ink-muted tabular-nums leading-tight">{value}</div>
+      <div className="mt-0.5 text-2xs text-ink-ghost uppercase tracking-wide">{label}</div>
+    </div>
+  );
+}
+
+function MobileStat({ value, label }: { value: React.ReactNode; label: string }) {
+  return (
+    <div>
+      <div className="font-mono text-13 text-ink-muted tabular-nums">{value}</div>
+      <div className="text-2xs text-ink-ghost uppercase tracking-wide">{label}</div>
+    </div>
+  );
+}
+
 /* ------------------------------------------------------------- empty/error */
 
-function TableSkeleton() {
+function ListSkeleton() {
   return (
     <div className="divide-y divide-line">
       {Array.from({ length: 6 }).map((_, i) => (
         <div key={i} className="flex items-center gap-4 px-4 py-3.5">
-          <Skeleton className="h-4 w-4" />
           <div className="flex items-center gap-2.5 flex-1">
-            <Skeleton className="h-8 w-8 rounded-pill" />
+            <Skeleton className="h-8 w-12 rounded-pill" />
             <div className="space-y-1.5">
-              <Skeleton className="h-3.5 w-20" />
-              <Skeleton className="h-2.5 w-32" />
+              <Skeleton className="h-3.5 w-36" />
+              <Skeleton className="h-2.5 w-24" />
             </div>
           </div>
-          <div className="flex items-center gap-2.5 flex-1">
-            <Skeleton className="h-8 w-8 rounded-pill" />
-            <div className="space-y-1.5">
-              <Skeleton className="h-3.5 w-20" />
-              <Skeleton className="h-2.5 w-32" />
-            </div>
-          </div>
+          <Skeleton className="hidden md:block h-8 w-16" />
+          <Skeleton className="hidden md:block h-8 w-20" />
           <Skeleton className="h-5 w-16 rounded-pill" />
-          <Skeleton className="h-8 w-20 rounded-input" />
+          <Skeleton className="h-8 w-24 rounded-input" />
         </div>
       ))}
     </div>
@@ -549,6 +668,24 @@ function GlyphCircle() {
         <path d="M6.5 9V7a3.5 3.5 0 1 1 7 0v2" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
       </svg>
     </div>
+  );
+}
+
+/** Compact masked balance for the market list — signals "you hold this, and it
+ *  stays encrypted until you reveal" without the full-size BalanceReveal. */
+function HeldMask({ symbol }: { symbol?: string }) {
+  return (
+    <span
+      className="inline-flex items-center gap-1.5 font-mono text-13 text-cipher [text-shadow:0_0_8px_rgb(var(--cipher)/0.45)]"
+      title="You hold an encrypted balance — reveal it to see the amount"
+    >
+      <svg viewBox="0 0 16 16" className="h-3 w-3 shrink-0" fill="none" aria-hidden="true">
+        <rect x="3.5" y="7" width="9" height="6" rx="1.4" stroke="currentColor" strokeWidth="1.3" />
+        <path d="M5.5 7V5.4a2.5 2.5 0 0 1 5 0V7" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+      </svg>
+      <span className="tracking-[0.16em] select-none">•••</span>
+      {symbol && <span className="text-ink-ghost tracking-normal">{symbol}</span>}
+    </span>
   );
 }
 

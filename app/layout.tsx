@@ -1,22 +1,13 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, JetBrains_Mono } from "next/font/google";
+import { GeistSans } from "geist/font/sans";
+import { GeistMono } from "geist/font/mono";
 import "./globals.css";
 import { Providers } from "./providers";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { THEME_SCRIPT } from "@/components/ThemeToggle";
 
-// Space Grotesk — geometric display sans, the BlindPay-style voice.
-const grotesk = Space_Grotesk({
-  subsets: ["latin"],
-  variable: "--font-inter", // keep the CSS var name so existing classes pick it up
-  display: "swap",
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-jetbrains-mono",
-  display: "swap",
-});
+// Geist (Vercel's neutral grotesk) for UI + Geist Mono for all numbers/hashes.
+// Self-hosted via the `geist` package — no Google-Fonts fetch at build time.
 
 // Set NEXT_PUBLIC_SITE_URL to your deployed URL so link previews resolve the
 // OG image absolutely. Falls back to Vercel's URL, then localhost in dev.
@@ -49,7 +40,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${grotesk.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
+    <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`} suppressHydrationWarning>
       <head>
         {/* Apply saved/system theme before paint to avoid a flash. */}
         <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />

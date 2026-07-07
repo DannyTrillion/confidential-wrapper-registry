@@ -67,12 +67,12 @@ export function TokenDetail({ address }: { address: string }) {
         <h2 className="text-sm font-medium text-ink">Not a registered pair on {net.name}</h2>
         <p className="mt-1.5 text-13 text-ink-faint max-w-md mx-auto">
           This address isn&apos;t in the {net.name} registry. You can still reveal any ERC-7984
-          balance you hold from the Reveal page.
+          balance you hold from your Portfolio.
         </p>
         <div className="mt-4 flex items-center justify-center gap-2">
-          <Link href="/" className="text-13 text-accentInk hover:underline">← Registry</Link>
+          <Link href="/" className="text-13 text-ink hover:underline">← Registry</Link>
           <span className="text-ink-ghost">·</span>
-          <Link href="/reveal" className="text-13 text-accentInk hover:underline">Reveal any token →</Link>
+          <Link href="/portfolio" className="text-13 text-ink hover:underline">Reveal any token →</Link>
         </div>
       </Card>
     );
@@ -101,7 +101,7 @@ export function TokenDetail({ address }: { address: string }) {
           <svg viewBox="0 0 16 16" className="h-4 w-4 text-ink-ghost" fill="none" aria-hidden="true">
             <path d="M3 8h9M9 5l3 3-3 3" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
-          <span className="font-mono text-lg text-accentInk">{pair.wrapper.symbol ?? "cToken"}</span>
+          <span className="font-mono text-lg text-ink">{pair.wrapper.symbol ?? "cToken"}</span>
         </div>
         <div className="flex items-center gap-2">
           {pair.isValid ? <Badge tone="valid" dot>Active</Badge> : <Badge tone="revoked" dot>Revoked</Badge>}
@@ -176,7 +176,7 @@ export function TokenDetail({ address }: { address: string }) {
                 ))}
                 {/* Underline that glides to the active tab. */}
                 <span
-                  className="absolute bottom-0 h-0.5 rounded-pill bg-accent transition-all duration-250 ease-out"
+                  className="absolute bottom-0 h-0.5 rounded-pill bg-ink transition-all duration-250 ease-out"
                   style={{ left: tabInd.left + 14, width: Math.max(0, tabInd.width - 28), opacity: tabInd.visible ? 1 : 0 }}
                   aria-hidden="true"
                 />

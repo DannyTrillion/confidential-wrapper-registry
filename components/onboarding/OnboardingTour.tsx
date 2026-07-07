@@ -35,16 +35,10 @@ const STEPS: Step[] = [
     body: "Your home base. It lists every token that has an approved confidential twin. Pick one to make a confidential version of it.",
   },
   {
-    target: "nav-/balances",
-    mood: "point",
-    title: "My Balances",
-    body: "Every confidential balance you hold, in one place. The amounts stay hidden on-screen until you choose to reveal them — just for you.",
-  },
-  {
-    target: "nav-/reveal",
+    target: "nav-/portfolio",
     mood: "think",
-    title: "Reveal",
-    body: "Check the real amount of any confidential token. You approve it once with your wallet, and only you can read the result.",
+    title: "Portfolio & Reveal",
+    body: "Your dashboard: every confidential balance you hold, hidden on-screen until you reveal them with a single wallet approval. You can also paste any token's address there to reveal it, even ones outside the registry.",
   },
   {
     target: "nav-/faucet",
@@ -132,7 +126,9 @@ export function OnboardingTour() {
     window.addEventListener(TOUR_START_EVENT, onStart);
     let t: ReturnType<typeof setTimeout> | undefined;
     try {
-      if (!window.localStorage.getItem(SEEN_KEY)) {
+      // ?notour suppresses the first-visit auto-start (screenshots / e2e runs).
+      const suppressed = window.location.search.includes("notour");
+      if (!suppressed && !window.localStorage.getItem(SEEN_KEY)) {
         t = setTimeout(() => {
           try {
             window.localStorage.setItem(SEEN_KEY, "1");
@@ -246,7 +242,7 @@ export function OnboardingTour() {
         ref={cardRef}
         tabIndex={-1}
         className={cn(
-          "absolute w-[min(92vw,360px)] rounded-card border border-accent/30 bg-surface/95 backdrop-blur-2xl shadow-2xl p-5 outline-none",
+          "absolute w-[min(92vw,360px)] rounded-card border border-line-strong bg-surface/95 backdrop-blur-2xl shadow-2xl p-5 outline-none",
           !reduced && "animate-rise-in",
         )}
         style={card}
@@ -267,7 +263,7 @@ export function OnboardingTour() {
               key={idx}
               className={cn(
                 "h-1.5 rounded-pill transition-all duration-300",
-                idx === i ? "w-5 bg-accent" : idx < i ? "w-1.5 bg-accent/50" : "w-1.5 bg-line-strong",
+                idx === i ? "w-5 bg-ink" : idx < i ? "w-1.5 bg-ink/50" : "w-1.5 bg-line-strong",
               )}
             />
           ))}
@@ -292,14 +288,14 @@ export function OnboardingTour() {
             {last ? (
               <button
                 onClick={onCta}
-                className="h-8 px-4 rounded-pill text-13 font-semibold bg-accent text-[#0a0a0a] hover:brightness-105 active:scale-[0.97] transition"
+                className="h-8 px-4 rounded-pill text-13 font-semibold bg-ink text-base hover:brightness-105 active:scale-[0.97] transition"
               >
                 {step.cta ?? "Done"}
               </button>
             ) : (
               <button
                 onClick={() => setI((v) => Math.min(STEPS.length - 1, v + 1))}
-                className="h-8 px-4 rounded-pill text-13 font-semibold bg-accent text-[#0a0a0a] hover:brightness-105 active:scale-[0.97] transition"
+                className="h-8 px-4 rounded-pill text-13 font-semibold bg-ink text-base hover:brightness-105 active:scale-[0.97] transition"
               >
                 Next
               </button>

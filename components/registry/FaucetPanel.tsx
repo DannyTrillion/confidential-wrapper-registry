@@ -113,7 +113,7 @@ export function FaucetPanel({ pair, chainId }: { pair: EnrichedPair; chainId: Su
         </div>
       ) : (
         <Button
-          variant="primary"
+          variant="accentOutline"
           className={cn("w-full", state.status === "pending" && "btn-progress")}
           onClick={onClaim}
           loading={state.status === "pending"}
@@ -152,7 +152,7 @@ function CountdownRing({ pct }: { pct: number }) {
         r={r}
         stroke="currentColor"
         strokeWidth="2"
-        className="text-accentInk/70 transition-[stroke-dashoffset] duration-1000 ease-linear"
+        className="text-ink/70 transition-[stroke-dashoffset] duration-1000 ease-linear"
         fill="none"
         strokeLinecap="round"
         strokeDasharray={c}

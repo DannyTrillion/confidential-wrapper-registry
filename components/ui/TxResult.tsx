@@ -88,7 +88,8 @@ export function TxResultProvider({ children }: { children: ReactNode }) {
 const CONFETTI = Array.from({ length: 12 }, (_, i) => {
   const angle = (i / 12) * Math.PI * 2;
   const dist = 52 + (i % 3) * 16;
-  const colors = ["#FFD208", "#34D399", "#FFFFFF"];
+  // Success is a STATUS moment — green and white only, no identity yellow.
+  const colors = ["#FFD208", "#FFFFFF"];
   return {
     tx: Math.round(Math.cos(angle) * dist),
     ty: Math.round(Math.sin(angle) * dist),
@@ -221,7 +222,7 @@ function TxResultOverlay({
             href={explorerTxUrl(result.chainId, result.txHash)}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-2.5 inline-flex items-center gap-1 text-2xs font-mono text-ink-faint hover:text-accentInk transition-colors"
+            className="mt-2.5 inline-flex items-center gap-1 text-2xs font-mono text-ink-faint hover:text-ink transition-colors"
           >
             {result.txHash.slice(0, 10)}…{result.txHash.slice(-8)} ↗
           </a>

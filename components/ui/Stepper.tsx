@@ -40,7 +40,7 @@ export function Stepper({
             {i < steps.length - 1 && (
               <div className="flex-1 h-px mt-3 mx-1.5 rounded-pill bg-line relative overflow-hidden">
                 <span
-                  className="absolute inset-y-0 left-0 bg-accent transition-[width] duration-300 ease-out"
+                  className="absolute inset-y-0 left-0 bg-ink transition-[width] duration-300 ease-out"
                   style={{ width: done ? "100%" : "0%" }}
                 />
               </div>
@@ -57,8 +57,8 @@ function Node({ done, active, errored, index }: { done: boolean; active: boolean
     <span
       className={cn(
         "grid place-items-center h-6 w-6 rounded-pill border text-2xs font-mono transition-colors duration-200",
-        done && "border-accent/40 bg-accent text-[#0a0a0a]",
-        active && "border-accent/40 bg-accent-faint text-accentInk",
+        done && "border-line-strong bg-ink text-base",
+        active && "border-line-strong bg-elevate/[0.06] text-ink",
         errored && "border-danger/40 bg-danger/10 text-danger",
         !done && !active && !errored && "border-line bg-raised text-ink-faint",
       )}

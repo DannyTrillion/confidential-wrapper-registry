@@ -31,7 +31,7 @@ export default function Error({ error, reset }: { error: Error & { digest?: stri
         <div className="mt-5 flex items-center justify-center gap-2.5">
           <button
             onClick={reset}
-            className="h-9 px-4 inline-flex items-center rounded-pill text-13 font-semibold bg-accent text-[#0a0a0a] hover:brightness-105 active:scale-[0.97] transition"
+            className="h-9 px-4 inline-flex items-center rounded-pill text-13 font-semibold bg-ink text-base hover:brightness-105 active:scale-[0.97] transition"
           >
             Try again
           </button>

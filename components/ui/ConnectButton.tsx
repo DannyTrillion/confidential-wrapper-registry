@@ -31,7 +31,9 @@ export function ConnectButton() {
           size="sm"
           loading={isPending}
           onClick={() => connectors[0] && connect({ connector: connectors[0] })}
+          className="btn-sheen group/connect gap-2 pl-3 hover:-translate-y-px transition-transform"
         >
+          {!isPending && <WalletGlyph />}
           {isPending ? "Connecting…" : (
             <>
               Connect<span className="hidden xs:inline">&nbsp;Wallet</span>
@@ -42,7 +44,14 @@ export function ConnectButton() {
     }
     return (
       <div className="relative" ref={ref}>
-        <Button variant="primary" size="sm" loading={isPending} onClick={() => setOpen((v) => !v)}>
+        <Button
+          variant="primary"
+          size="sm"
+          loading={isPending}
+          onClick={() => setOpen((v) => !v)}
+          className="btn-sheen group/connect gap-2 pl-3 hover:-translate-y-px transition-transform"
+        >
+          {!isPending && <WalletGlyph />}
           {isPending ? "Connecting…" : (
             <>
               Connect<span className="hidden xs:inline">&nbsp;Wallet</span>
@@ -84,7 +93,12 @@ export function ConnectButton() {
             : "border-line text-ink bg-raised hover:border-line-strong",
         )}
       >
-        <span className={cn("h-2 w-2 rounded-pill", unsupported ? "bg-danger" : "bg-ok")} />
+        <span className="relative flex h-2 w-2" aria-hidden="true">
+          {!unsupported && (
+            <span className="absolute inline-flex h-full w-full rounded-pill bg-accent/50 animate-[ping_2.4s_ease-out_infinite]" />
+          )}
+          <span className={cn("relative h-2 w-2 rounded-pill", unsupported ? "bg-danger" : "bg-accent")} />
+        </span>
         {truncateAddress(address)}
         <svg viewBox="0 0 12 12" className="h-3 w-3 text-ink-faint" fill="none" aria-hidden="true">
           <path d="m3 4.5 3 3 3-3" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
@@ -125,5 +139,21 @@ export function ConnectButton() {
         </div>
       )}
     </div>
+  );
+}
+
+/** Tiny wallet glyph — nudges toward the label on hover. */
+function WalletGlyph() {
+  return (
+    <svg
+      viewBox="0 0 16 16"
+      className="h-3.5 w-3.5 text-[#0a0a0a]/70 transition-transform duration-200 ease-out group-hover/connect:translate-x-0.5 group-hover/connect:text-[#0a0a0a]"
+      fill="none"
+      aria-hidden="true"
+    >
+      <rect x="1.8" y="3.8" width="12.4" height="9" rx="2" stroke="currentColor" strokeWidth="1.3" />
+      <path d="M10.5 8.3h2" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+      <path d="M3.5 3.8 10 2v1.8" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
   );
 }

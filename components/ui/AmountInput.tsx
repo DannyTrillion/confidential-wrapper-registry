@@ -40,7 +40,7 @@ export function AmountInput({
     <div
       className={cn(
         "flex items-center gap-2 h-12 px-3 rounded-input border bg-base transition-colors duration-150",
-        invalid ? "border-danger/50" : "border-line focus-within:border-accent/50",
+        invalid ? "border-danger/50" : "border-line focus-within:border-line-strong",
         disabled && "opacity-50",
         shaking && "animate-shake",
       )}
@@ -64,7 +64,7 @@ export function AmountInput({
           type="button"
           onClick={onMax}
           disabled={disabled}
-          className="shrink-0 text-2xs font-medium text-accentInk hover:text-[#FFDB3D] px-1.5 py-0.5 rounded-[4px] hover:bg-accent-faint transition-colors duration-150"
+          className="shrink-0 text-2xs font-medium text-ink-muted hover:text-ink px-1.5 py-0.5 rounded-[4px] hover:bg-elevate/[0.06] transition-colors duration-150"
         >
           MAX
         </button>

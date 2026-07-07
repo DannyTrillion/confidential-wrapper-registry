@@ -11,8 +11,6 @@ import { ERC20_ABI, ERC7984_WRAPPER_ABI } from "@/lib/abis";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { TokenIcon } from "@/components/fx/TokenIcon";
-import { PageGuide } from "@/components/learn/PageGuide";
-import { PageHeader } from "./BalancesView";
 import { cn } from "@/lib/cn";
 
 interface SideMeta {
@@ -25,7 +23,9 @@ interface VerifyResult {
   conf: SideMeta & { isErc7984: boolean };
 }
 
-export function ExtendView() {
+/** Interactive pair builder + registration paths — lives inside the Developer
+ *  Kit (anchored at /developers#add-pair; the old /extend route redirects). */
+export function AddPairSection() {
   const config = useConfig();
   const { chainId: explorerChain } = useExplorerNetwork();
   const [chain, setChain] = useState<SupportedChainId>(explorerChain);
@@ -88,21 +88,6 @@ export function ExtendView() {
 
   return (
     <div className="space-y-5">
-      <PageHeader
-        title="Add a token pair"
-        subtitle="The registry is extensible by design. Surface any ERC-20 ↔ ERC-7984 pair — register it on-chain so everyone sees it, or declare it locally for custom and dev-only tokens."
-      />
-
-      <PageGuide
-        id="extend"
-        intro="The app reads the official registry live from the blockchain, and merges in any local pairs on top — a hybrid registry. There's no hardcoded token list, so new pairs need no code surgery."
-        points={[
-          { label: "Local = self-serve", body: "Add one line to a config file for any pair — custom or not-yet-registered. It appears tagged “Local”, fully wrappable and revealable. No permission needed; works in your own instance instantly." },
-          { label: "On-chain = canonical", body: "A pair registered on the Wrappers Registry shows up here automatically — zero code, for everyone. The official registry is curated (owner-only), so this path goes through Zama, or your own registry." },
-          { label: "On-chain truth wins", body: "If a local pair is later registered on-chain, the on-chain entry takes over automatically. You only ever supply two addresses — metadata is resolved live." },
-        ]}
-      />
-
       {/* Interactive builder */}
       <Card className="p-5 sm:p-6 space-y-4">
         <div>
@@ -124,7 +109,7 @@ export function ExtendView() {
               }}
               className={cn(
                 "px-3 h-7 rounded-pill text-2xs font-medium transition-colors",
-                chain === id ? "bg-accent text-[#0a0a0a]" : "text-ink-faint hover:text-ink",
+                chain === id ? "bg-ink text-base" : "text-ink-faint hover:text-ink",
               )}
             >
               {getNetwork(id)?.name}
@@ -203,8 +188,8 @@ export function ExtendView() {
       </section>
 
       {/* Honest note on which path is actually self-serve. */}
-      <div className="rounded-card border border-accent/20 bg-accent-faint p-4 flex items-start gap-3">
-        <svg viewBox="0 0 18 18" className="h-4 w-4 mt-0.5 shrink-0 text-accentInk" fill="none" aria-hidden="true">
+      <div className="rounded-card border border-line-strong bg-elevate/[0.06] p-4 flex items-start gap-3">
+        <svg viewBox="0 0 18 18" className="h-4 w-4 mt-0.5 shrink-0 text-ink" fill="none" aria-hidden="true">
           <circle cx="9" cy="9" r="6.8" stroke="currentColor" strokeWidth="1.3" />
           <path d="M9 8.2v4M9 5.8h.01" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
         </svg>
@@ -242,7 +227,7 @@ function AddressField({
         spellCheck={false}
         className={cn(
           "mt-1 w-full h-10 px-3 rounded-input bg-base border text-13 font-mono text-ink placeholder:text-ink-ghost outline-none transition-colors",
-          show && !valid ? "border-danger/50" : "border-line focus-visible:border-accent/50",
+          show && !valid ? "border-danger/50" : "border-line focus-visible:border-line-strong",
         )}
       />
       {show && !valid && <p className="mt-1 text-2xs text-danger">That doesn&apos;t look like an address.</p>}
@@ -298,7 +283,7 @@ function MethodCard({
   return (
     <div className="rounded-card border border-line glass-soft p-4">
       <div className="flex items-center gap-2.5">
-        <span className="grid place-items-center h-6 w-6 rounded-pill bg-accent/15 text-accentInk text-2xs font-semibold">{n}</span>
+        <span className="grid place-items-center h-6 w-6 rounded-pill bg-ink/15 text-ink text-2xs font-semibold">{n}</span>
         <h3 className="text-13 font-medium text-ink">{title}</h3>
       </div>
       <p className="mt-2 text-13 text-ink-faint leading-relaxed">{body}</p>
@@ -320,7 +305,7 @@ function CopyButton({ text }: { text: string }) {
           /* clipboard blocked */
         }
       }}
-      className="inline-flex items-center gap-1 text-2xs text-ink-faint hover:text-accentInk transition-colors"
+      className="inline-flex items-center gap-1 text-2xs text-ink-faint hover:text-ink transition-colors"
     >
       {copied ? (
         <>

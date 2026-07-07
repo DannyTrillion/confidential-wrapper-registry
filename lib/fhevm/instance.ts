@@ -53,7 +53,17 @@ export async function getFhevmInstance(chainId: DecryptChainId): Promise<FhevmIn
     }
 
     const base = chainId === mainnet.id ? MainnetConfig : SepoliaConfig;
-    const config = { ...base, network: RPC[chainId] } as Parameters<typeof createInstance>[0];
+    // Mainnet's hosted relayer requires an `x-api-key` — which must never ship
+    // to the browser (Zama security guidance). All mainnet relayer traffic goes
+    // through our backend proxy, which injects the key server-side. Sepolia's
+    // relayer is open and is called directly.
+    const config = {
+      ...base,
+      network: RPC[chainId],
+      ...(chainId === mainnet.id
+        ? { relayerUrl: `${window.location.origin}/api/relayer` }
+        : {}),
+    } as Parameters<typeof createInstance>[0];
 
     // Setup reads can transiently return `0x` on public RPCs; retry a few times.
     let lastErr: unknown;

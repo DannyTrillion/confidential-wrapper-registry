@@ -130,6 +130,16 @@ export function WrapPanel({ pair, chainId }: { pair: EnrichedPair; chainId: Supp
     }
   }
 
+  if (!net.supportsDecryption) {
+    return (
+      <div className="rounded-input border border-line glass-soft px-3 py-3 text-13 text-ink-muted leading-relaxed">
+        Wrapping on <span className="text-ink">{net.name}</span> is disabled until a Zama relayer
+        key is configured — without one you couldn&apos;t reveal or unwrap the result. Switch to
+        Sepolia for the full lifecycle, key-free.
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-4">
       <PairFlow pair={pair} direction="forward" active={state.status === "pending"} />

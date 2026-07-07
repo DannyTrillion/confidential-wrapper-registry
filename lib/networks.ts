@@ -12,6 +12,12 @@ import type { Address } from "viem";
 
 export type SupportedChainId = typeof mainnet.id | typeof sepolia.id;
 
+/** The MAINNET relayer rejects unauthenticated requests (403 "Missing or
+ *  invalid Zama API Key"). The key itself lives server-side only (see
+ *  app/api/relayer); this PUBLIC flag just tells the UI the proxy is armed, so
+ *  mainnet crypto flows (reveal/wrap/unwrap) can be offered. Sepolia needs none. */
+const HAS_RELAYER_API_KEY = process.env.NEXT_PUBLIC_MAINNET_RELAYER_ENABLED === "true";
+
 export interface NetworkConfig {
   readonly chainId: SupportedChainId;
   readonly name: string;
@@ -35,8 +41,8 @@ export const NETWORKS: Record<SupportedChainId, NetworkConfig> = {
     isTestnet: false,
     registry: "0xeb5015fF021DB115aCe010f23F55C2591059bBA0",
     explorerUrl: "https://etherscan.io",
-    // FHEVM is live on mainnet — the relayer SDK ships a MainnetConfig.
-    supportsDecryption: true,
+    // FHEVM is live on mainnet, but its relayer requires an API key.
+    supportsDecryption: HAS_RELAYER_API_KEY,
     supportsFaucet: false,
   },
   [sepolia.id]: {

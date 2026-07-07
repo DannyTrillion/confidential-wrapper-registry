@@ -20,10 +20,17 @@ export function MobileNav() {
               aria-label={item.label}
               data-tour={`nav-${item.href}`}
               className={cn(
-                "flex-1 min-w-0 flex flex-col items-center justify-center gap-1 py-2 transition-colors",
-                active ? "text-accentInk" : "text-ink-faint",
+                "relative flex-1 min-w-0 flex flex-col items-center justify-center gap-1 py-2 transition-colors",
+                active ? "text-ink" : "text-ink-faint",
               )}
             >
+              <span
+                className={cn(
+                  "absolute top-0 inset-x-5 h-[2px] rounded-pill bg-accent transition-opacity",
+                  active ? "opacity-100" : "opacity-0",
+                )}
+                aria-hidden="true"
+              />
               <span className="[&>svg]:h-4 [&>svg]:w-4">{item.icon}</span>
               <span className="text-[10px] font-medium leading-none truncate max-w-full px-0.5">
                 {item.short ?? item.label}

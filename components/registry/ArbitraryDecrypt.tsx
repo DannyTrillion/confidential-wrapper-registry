@@ -109,12 +109,12 @@ export function ArbitraryDecrypt() {
           spellCheck={false}
           className={cn(
             "flex-1 h-10 px-3 rounded-input bg-base border text-13 font-mono text-ink placeholder:text-ink-ghost outline-none transition-colors",
-            input && !valid ? "border-danger/50" : "border-line focus-visible:border-accent/50",
+            input && !valid ? "border-danger/50" : "border-line focus-visible:border-line-strong",
           )}
         />
         <NetworkGuard targetChainId={chainId} action="reveal this balance">
           <Button
-            variant="primary"
+            variant="secondary"
             onClick={onDecrypt}
             disabled={!valid}
             loading={state.status === "pending"}

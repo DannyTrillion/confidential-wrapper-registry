@@ -1,39 +1,25 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Intro } from "@/components/Intro";
 import { RegistryExplorer, type TokenAction } from "@/components/registry/RegistryExplorer";
-import { PageGuide } from "@/components/learn/PageGuide";
+import { ProductDeck } from "@/components/registry/ProductDeck";
 import type { EnrichedPair } from "@/lib/registry/types";
 
+/**
+ * Registry — one job: browsing pairs. The stat strip is the page header, the
+ * pair table starts within the first screen, and everything personal lives on
+ * /portfolio (linked from a single summary line inside the strip).
+ */
 export function RegistryView() {
   const router = useRouter();
   const open = (p: EnrichedPair, action?: TokenAction) =>
     router.push(`/token/${p.confidentialToken}${action ? `?action=${action}` : ""}`);
+
   return (
     <>
-      <Intro />
-      <div className="mb-5">
-        <PageGuide
-          id="registry"
-          intro="The registry is the official directory of public tokens that have an approved confidential twin. This page reads it live from the blockchain — nothing is hardcoded."
-          points={[
-            {
-              label: "Always live",
-              body: "Every pair comes straight from the official on-chain registry on both networks. New ones show up here on their own — switch networks with the toggle up top.",
-            },
-            {
-              label: "Active vs Revoked",
-              body: "Retired pairs stay listed for history but are flagged, and wrapping is turned off for them. Filter and search to find a token fast (press / to search).",
-            },
-            {
-              label: "Open a token",
-              body: "Click Manage on any row to wrap, unwrap, reveal your balance, or claim test tokens for that pair. ⌘K jumps to any token from anywhere.",
-            },
-          ]}
-        />
-      </div>
+      <h1 className="sr-only">Confidential Wrapper Registry</h1>
       <RegistryExplorer onOpenPair={open} />
+      <ProductDeck />
     </>
   );
 }

@@ -1,4 +1,6 @@
-import { BalancesView } from "@/components/views/BalancesView";
+import { redirect } from "next/navigation";
+
+/** The balances page moved — portfolio is its jup.ag-style successor. */
 export default function Page() {
-  return <BalancesView />;
+  redirect("/portfolio");
 }

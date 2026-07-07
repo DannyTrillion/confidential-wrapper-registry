@@ -13,21 +13,24 @@ Built for the **Zama Developer Program — Season 3 Bounty Track**.
 
 ![Registry Explorer](docs/explorer.png)
 
-Per-pair actions live in a drawer with Overview / Reveal / Wrap / Unwrap / Faucet
-tabs. Every state — including "connect your wallet" and revoked pairs — is designed.
+Per-pair actions live on a dedicated token page with Reveal / Wrap / Unwrap /
+Faucet tabs. Every state — disconnected, revoked, key-gated mainnet — is designed.
 
 <img src="docs/drawer.png" alt="Pair action drawer" width="380" />
 
-### Design language — "Ciphertext"
+### Design language — "Every balance encrypted. Until you reveal."
 
-The interface treats encryption as its material. Encrypted balances render as
-*live* cycling hex glyphs and resolve with a left-to-right **decryption cascade**
-on unlock; the surface carries a breathing aurora over a faint drifting hex field;
-token avatars are deterministic hash-derived seals; and a **⌘K command palette**
-jumps to any token, switches network, or runs an action. All motion honours
-`prefers-reduced-motion`. Full spec in [DESIGN.md](DESIGN.md).
+A jup.ag-grade shell on a near-black canvas: left sidebar navigation, a
+search-led top bar, and content that leads with the working product. **Zama
+yellow is the identity accent** — logo, active nav, focus/selected states, at
+most one solid CTA per screen, and the reveal moment (balances resolve with a
+yellow decrypt glow). Green is reserved for transient success; encrypted cues
+(masked dots, locks) are a neutral cipher slate with a soft shimmer. The
+backdrop is a sparse starfield with faint blue/violet nebulas. All motion
+honours `prefers-reduced-motion`. Full spec in [DESIGN.md](DESIGN.md).
 
-<img src="docs/palette.png" alt="Command palette" width="520" />
+> Screenshots in `docs/` predate the current design — re-capture before
+> submission (tracked in [docs/QA_CHECKLIST.md](docs/QA_CHECKLIST.md)).
 
 ---
 
@@ -37,7 +40,7 @@ jumps to any token, switches network, or runs an action. All motion honours
 |---|---------|---------|
 | 1 | **Registry Explorer** | Reads every `TokenWrapperPair` from the registry on both networks via `getTokenConfidentialTokenPairsLength` + paginated `getTokenConfidentialTokenPairsSlice`. Resolves each side's metadata. Revoked pairs (`isValid=false`) are shown with a clear status and have wrap/unwrap blocked — never hidden. |
 | 2 | **Wrap / Unwrap** | Wrap = ERC-20 `approve` (exact amount, allowance-aware) → wrapper `wrap`. Unwrap = the two-phase encrypted flow (burn → relayer reveal → `finalizeUnwrap`) with staged status. Decimals are always read on-chain — never hardcoded. |
-| 3 | **Confidential balance decryption** | EIP-712 user-decrypt on **both networks** (Sepolia + mainnet): fetch the balance handle → `generateKeypair` → `createEIP712` → sign once → `userDecrypt`. The session is cached so you sign **once per session**, not per token. Works for **any ERC-7984 token, registered or not** (paste-an-address). A `bytes32(0)` handle renders "No balance yet" and is never sent to the relayer. |
+| 3 | **Confidential balance decryption** | EIP-712 user-decrypt on Sepolia out of the box, and on **mainnet via a Zama relayer API key** (served through a server-side proxy — see *Mainnet relayer access*): fetch the balance handle → `generateKeypair` → `createEIP712` → sign once → `userDecrypt`. The session is cached so you sign **once per session**, not per token. Works for **any ERC-7984 token, registered or not** (paste-an-address). A `bytes32(0)` handle renders "No balance yet" and is never sent to the relayer. |
 | 4 | **Sepolia faucet** | One-click `mint` of the underlying mock token (the wrappable side of each cTokenMock), with a client-side per-address cooldown and clear feedback. |
 
 Beyond the four required features, the app adds judging-grade UX depth:
@@ -45,7 +48,7 @@ Beyond the four required features, the app adds judging-grade UX depth:
 | | Feature | Summary |
 |---|---------|---------|
 | 5 | **My Balances portfolio** | Reads every confidential balance you hold across the registry in one multicall and reveals them **all with a single signature** (one cached session), each resolving with the cascade. Includes a **"reveal any ERC-7984"** paste-an-address box for tokens outside the registry. |
-| 6 | **Onboarding** | First-run Sepolia guide — Faucet → Wrap → Reveal — that deep-links into the right drawer tab so the full confidential loop is three clicks away. |
+| 6 | **Onboarding** | First-run Sepolia guide — Faucet → Wrap → Reveal — that deep-links into the right token-page tab so the full confidential loop is three clicks away. |
 | 7 | **Resilient unwrap** | The two-phase unwrap persists its request before finalizing, so a failed phase-2 is **resumable** — burned funds are never stranded. |
 | 8 | **Global toasts** | Staged tx notifications with explorer links, in an ARIA live region. |
 
@@ -55,9 +58,11 @@ Beyond the four required features, the app adds judging-grade UX depth:
 
 ```
 app/                      Next.js App Router entry (server) + client providers
-  layout.tsx              Inter + JetBrains Mono fonts, metadata
+  layout.tsx              Geist Sans + Geist Mono (self-hosted), metadata
   providers.tsx           wagmi + react-query
-  page.tsx                Explorer screen
+  page.tsx                Registry (explorer) — plus /portfolio, /activity,
+                          /faucet, /docs, /developers, /token/[address],
+                          /api/relayer (mainnet key proxy)
 lib/
   networks.ts             SINGLE source of addresses (registry per chain) + chain metadata
   abis.ts                 Minimal, verified ABI fragments (registry, ERC-20, ERC-7984 wrapper)
@@ -68,7 +73,9 @@ lib/
   useActionFlow.ts        idle → pending(step) → success | error state machine
   hooks/                  token state, write-and-wait, faucet cooldown
 components/
-  registry/               Explorer table, PairDrawer, Wrap/Unwrap/Decrypt/Faucet panels
+  registry/               Explorer list, Wrap/Unwrap/Decrypt/Faucet panels
+  views/                  One view per route (Registry, Portfolio, Activity, …)
+  dev/                    Developer Kit: snippets, add-a-pair builder, proof table
   ui/                     Design-system primitives (Button, Card, Badge, Address, …)
 contracts/                Hardhat + FHEVM-mock test package (see Testing)
 DESIGN.md                 The design system every screen is held to
@@ -131,7 +138,7 @@ support, tagged "Local". Adding a whole new network is a one-object edit in
 
 - **Next.js 14** (App Router) + **TypeScript**
 - **wagmi v2** + **viem** (injected wallet, multicall, fallback public RPCs)
-- **@zama-fhe/relayer-sdk** (bundle import; `initSDK()` WASM before `createInstance`)
+- **@zama-fhe/relayer-sdk** (`/web` ESM import; `initSDK()` WASM once, per-chain instances)
 - **Tailwind CSS** with a custom token layer encoding `DESIGN.md`
 - **Hardhat** + **@fhevm/hardhat-plugin** mock + **@openzeppelin/confidential-contracts** for tests
 
@@ -163,6 +170,16 @@ npm test                        # hardhat — 13 tests on the mock node
 
 Public RPCs are used by default (fine for browsing). For production reliability,
 set `NEXT_PUBLIC_SEPOLIA_RPC_URL` / `NEXT_PUBLIC_MAINNET_RPC_URL`.
+
+### Mainnet relayer access (optional)
+
+Sepolia works with zero configuration. Zama's **mainnet** relayer requires an
+API key ([apply here](https://docs.zama.org/protocol/sdk/alpha/guides/relayer-api-keys)).
+Per Zama's security guidance the key never ships to the browser: set the
+server-only `ZAMA_RELAYER_API_KEY`, flip `NEXT_PUBLIC_MAINNET_RELAYER_ENABLED=true`,
+and all mainnet relayer traffic routes through [`/api/relayer`](app/api/relayer/%5B...path%5D/route.ts),
+which injects the `x-api-key` header server-side. Without the key, mainnet is
+honestly gated to read + discovery (wrap/unwrap/reveal disabled with an explanation).
 
 ### Deploy to Vercel
 

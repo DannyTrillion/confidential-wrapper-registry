@@ -7,36 +7,43 @@
      Dark is the default; adding `.light` to <html> flips them. */
   :root {
     color-scheme: dark;
-    --base: 0 0 0;
-    --surface: 11 11 13;
-    --raised: 22 22 25;
-    --accent: 255 210 8; /* fills: buttons, logo, badges */
-    --accent-ink: 255 210 8; /* accent TEXT/links/icons (readable per theme) */
-    --ok: 74 222 128;
-    --danger: 248 113 113;
-    --warn: 251 191 36;
-    --ink: 237 237 239;
-    --ink-muted: 161 161 170;
-    --ink-faint: 113 113 122;
-    --ink-ghost: 82 82 91;
+    /* jup.ag slate — near-black blue surfaces, one mint accent. The accent and
+       the "encrypted" cue are the same color family: confidentiality IS the brand. */
+    --base: 6 8 10; /* near-black page — hairlines and elevation do the separating */
+    --surface: 13 18 23; /* card slate, barely lighter than the void */
+    --raised: 24 33 42; /* raised slate (hovers, pills) */
+    --well: 8 11 14; /* inset input wells — darker than the card */
+    --accent: 255 210 8; /* IDENTITY accent — Zama yellow, used sparingly (logo,
+                            active nav, focus/selected, one primary CTA, reveal) */
+    --accent-ink: 255 210 8; /* identity accent as TEXT/icons (readable per theme) */
+    --cipher: 139 154 168; /* encrypted/masked cue — neutral cool slate, no color claim */
+    --ok: 61 206 140; /* STATUS green — Active pills, active counts, success only */
+    --danger: 229 72 77;
+    --warn: 224 168 62;
+    --ink: 240 240 242;
+    --ink-muted: 182 182 192;
+    --ink-faint: 150 150 161;
+    --ink-ghost: 120 120 130;
     --line: 255 255 255;
     --overlay: 255 255 255;
   }
 
   .light {
     color-scheme: light;
-    --base: 244 245 247; /* cool light-grey page so white cards pop */
+    --base: 243 246 247; /* cool paper page so white cards pop */
     --surface: 255 255 255;
-    --raised: 236 237 240;
-    --accent: 255 210 8; /* fills stay bright Zama yellow (with dark text) */
-    --accent-ink: 154 110 0; /* readable deep gold for accent text/links on white */
+    --raised: 233 237 239;
+    --well: 240 243 244; /* inset input wells on light */
+    --accent: 255 210 8; /* identity yellow fills stay bright (with dark text) */
+    --accent-ink: 154 110 0; /* readable deep gold for identity text/icons on white */
+    --cipher: 100 116 139; /* encrypted cue — neutral slate on light */
     --ok: 21 128 61;
-    --danger: 220 38 38;
-    --warn: 180 83 9;
-    --ink: 24 24 27;
-    --ink-muted: 82 82 91;
-    --ink-faint: 113 113 122;
-    --ink-ghost: 161 161 170;
+    --danger: 205 43 49;
+    --warn: 158 100 15;
+    --ink: 17 17 20;
+    --ink-muted: 60 60 68;
+    --ink-faint: 88 88 97;
+    --ink-ghost: 120 120 130;
     --line: 0 0 0;
     --overlay: 0 0 0;
   }
@@ -70,7 +77,7 @@
   }
 
   ::selection {
-    background: rgba(255, 210, 8, 0.22);
+    background: rgb(var(--overlay) / 0.16);
     color: rgb(var(--ink));
   }
 }
@@ -81,6 +88,38 @@
     @apply border-line;
   }
 
+  /* Ambient space layer is a dark-theme mood; light mode stays clean paper. */
+  .light .stars-layer {
+    display: none;
+  }
+  .light .alien-glow {
+    opacity: 0.4;
+  }
+
+  /* Ticker rail (jup.ag-style): a seamless marquee of registry pairs. The
+     track holds two identical sets; translating -50% loops invisibly. */
+  .ticker-track {
+    display: flex;
+    width: max-content;
+    animation: ticker-scroll 56s linear infinite;
+  }
+  .ticker-track:hover {
+    animation-play-state: paused;
+  }
+  @keyframes ticker-scroll {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ticker-track {
+      animation: none;
+    }
+  }
+
   /* Outlined (stroke-only) display text — Zama-yellow stroke for the hero. */
   .text-outline {
     color: transparent;
@@ -89,21 +128,23 @@
 
   /* Nested frosted panel — a touch lighter than the card it sits on, so inner
      boxes read as layered glass rather than flat dark insets. */
+  /* Flat nested panel — a faint solid wash, no blur. Reads as a subtle inset
+     on the card, not frosted glass. */
   .glass-soft {
-    background-color: rgb(var(--overlay) / 0.025);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    background-color: rgb(var(--overlay) / 0.03);
   }
 
-  /* Redacted ciphertext shimmer — the "locked balance" look. */
+  /* Redacted ciphertext shimmer — the "locked balance" look. Faintly
+     cipher-tinted so "hidden" reads as designed, not disabled. */
   .ciphertext {
     background-image: linear-gradient(
       90deg,
-      rgb(var(--overlay) / 0.14) 0%,
-      rgb(var(--overlay) / 0.3) 20%,
-      rgb(var(--overlay) / 0.14) 40%,
-      rgb(var(--overlay) / 0.14) 100%
+      rgb(var(--cipher) / 0.22) 0%,
+      rgb(var(--cipher) / 0.5) 20%,
+      rgb(var(--cipher) / 0.22) 40%,
+      rgb(var(--cipher) / 0.22) 100%
     );
+    filter: drop-shadow(0 0 7px rgb(var(--cipher) / 0.3));
     background-size: 200% 100%;
     -webkit-background-clip: text;
     background-clip: text;
@@ -150,7 +191,7 @@
   .wire-pulse {
     position: absolute;
     inset: 0;
-    background: linear-gradient(90deg, transparent 0%, rgba(255, 210, 8, 0.55) 50%, transparent 100%);
+    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255, 0.55) 50%, transparent 100%);
     background-size: 36% 100%;
     background-repeat: no-repeat;
     background-position: -40% 0;
@@ -158,10 +199,10 @@
     opacity: 0.5;
   }
   .wire-pulse[data-active="true"] {
-    background-image: linear-gradient(90deg, transparent 0%, rgba(255, 210, 8, 0.95) 50%, transparent 100%);
+    background-image: linear-gradient(90deg, transparent 0%, rgba(255,255,255, 0.95) 50%, transparent 100%);
     animation-duration: 1s;
     opacity: 1;
-    box-shadow: 0 0 12px rgba(255, 210, 8, 0.35);
+    box-shadow: 0 0 12px rgba(255,255,255, 0.35);
   }
   .wire-pulse[data-dir="reverse"] {
     animation-direction: reverse;
@@ -302,14 +343,14 @@
     100% {
       box-shadow:
         0 0 0 9999px rgba(2, 2, 4, 0.74),
-        0 0 0 2px rgba(255, 210, 8, 0.7),
-        0 0 22px 4px rgba(255, 210, 8, 0.28);
+        0 0 0 2px rgba(255,255,255, 0.7),
+        0 0 22px 4px rgba(255,255,255, 0.28);
     }
     50% {
       box-shadow:
         0 0 0 9999px rgba(2, 2, 4, 0.74),
-        0 0 0 2px rgba(255, 210, 8, 0.95),
-        0 0 30px 7px rgba(255, 210, 8, 0.42);
+        0 0 0 2px rgba(255,255,255, 0.95),
+        0 0 30px 7px rgba(255,255,255, 0.42);
     }
   }
 

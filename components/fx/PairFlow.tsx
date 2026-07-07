@@ -32,7 +32,7 @@ export function PairFlow({
           <span
             className={cn(
               "absolute left-1/2 -translate-x-1/2 -top-2 text-2xs uppercase tracking-wide transition-colors duration-200",
-              active ? "text-accentInk" : "text-ink-ghost",
+              active ? "text-ink" : "text-ink-ghost",
             )}
           >
             {direction === "reverse" ? "unwrap" : "wrap"}
@@ -57,7 +57,7 @@ function Node({
     <div className="flex flex-col items-center gap-1.5 w-20 shrink-0">
       <TokenIcon symbol={label} confidential={confidential} size={36} />
       <div className="text-center leading-tight">
-        <div className={cn("font-mono text-2xs truncate max-w-20", confidential ? "text-accentInk" : "text-ink-muted")}>
+        <div className={cn("font-mono text-2xs truncate max-w-20", confidential ? "text-ink" : "text-ink-muted")}>
           {label}
         </div>
         <div className="text-[10px] text-ink-ghost">{sub}</div>

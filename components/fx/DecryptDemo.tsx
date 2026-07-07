@@ -10,21 +10,15 @@ const SAMPLE = { symbol: "cUSDC", handle: "0x9f…a705" };
  * encrypted/hidden treatment (masked dots, ENCRYPTED badge) and never shows a
  * concrete figure — nothing on screen should pretend to be a real, revealed
  * balance until a wallet is connected and the user has actually revealed it.
- * Once connected, the live card (HeroPanel) takes over.
+ * Once connected, the live Portfolio dashboard takes over.
  */
 export function DecryptDemo({ className }: { className?: string }) {
   const state: RevealState = { kind: "locked" };
 
   return (
-    <div className={cn("rounded-card border border-line bg-surface/80 backdrop-blur-sm p-5 w-full select-none", className)} aria-hidden="true">
-      <div className="flex items-center justify-between">
-        <span className="text-2xs font-mono uppercase tracking-wide text-ink-faint">Confidential balance</span>
-        <span className="inline-flex items-center gap-1.5 rounded-pill border border-line bg-raised px-2 py-0.5 text-[10px] font-medium tracking-wide text-ink-faint">
-          ENCRYPTED
-        </span>
-      </div>
-
-      <div className="mt-4 min-h-[40px]">
+    <div className={cn("rounded-input border border-line bg-well p-4 w-full select-none", className)} aria-hidden="true">
+      {/* The instrument frame already titles this card — the well stays bare. */}
+      <div className="min-h-[40px]">
         <BalanceReveal state={state} decimals={6} symbol={SAMPLE.symbol} showLock />
       </div>
 
